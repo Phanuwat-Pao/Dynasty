@@ -5,22 +5,33 @@ import { v } from "convex/values";
 // You can delete this file (schema.ts) and the
 // app will continue to work.
 // The schema provides more precise TypeScript types.
+
 export default defineSchema({
-  numbers: defineTable({
-    value: v.number(),
-  }),
   people: defineTable({
     nameTh: v.string(),
     nameEn: v.string(),
     portraitImageId: v.optional(v.id("_storage")),
     userId: v.string(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+    createdBy: v.string(),
+    updatedBy: v.string(),
   }).index("by_userId", ["userId"]),
 
   relationships: defineTable({
     person1Id: v.id("people"),
     person2Id: v.id("people"),
-    type: v.string(), // e.g., "friend", "colleague", "family"
+    relationshipType: v.union(
+      v.literal("parent"),
+      v.literal("child"),
+      v.literal("sibling"),
+      v.literal("spouse"),
+    ), // e.g., "friend", "colleague", "family"
     userId: v.string(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+    createdBy: v.string(),
+    updatedBy: v.string(),
   })
     .index("by_userId", ["userId"])
     .index("by_person1Id", ["person1Id"])

@@ -1,18 +1,16 @@
 import { v } from "convex/values";
-import { getDictionary } from "../get-dictionary";
 import { mutation, query } from "./_generated/server";
-
-const dictionary = await getDictionary("th");
 
 // Mutation to add a relationship between two people
 export const addRelationship = mutation({
   args: {
     person1Id: v.id("people"),
     person2Id: v.id("people"),
-    type: v.union(
-      ...Object.getOwnPropertyNames(dictionary.relationshipTypes).map(
-        v.literal,
-      ),
+    relationshipType: v.union(
+      v.literal("parent"),
+      v.literal("child"),
+      v.literal("sibling"),
+      v.literal("spouse"),
     ),
   },
   handler: async (ctx, args) => {
@@ -47,87 +45,76 @@ export const addRelationship = mutation({
     const relationshipId = await ctx.db.insert("relationships", {
       person1Id: args.person1Id,
       person2Id: args.person2Id,
-      type: args.type,
+      relationshipType: args.relationshipType,
       userId: identity.subject,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+      createdBy: identity.subject,
+      updatedBy: identity.subject,
     });
 
     return relationshipId;
   },
 });
 
-// Query to list relationships for the current user
-export const listRelationshipsForUser = query({
+// Query to get all relationships
+export const listRelationships = query({
   args: {},
   handler: async (ctx) => {
     const identity = await ctx.auth.getUserIdentity();
-
     if (identity === null) {
-      return [];
+      throw new Error("User must be logged in to list relationships.");
     }
 
-    const relationships = await ctx.db
-      .query("relationships")
-      .withIndex("by_userId", (q) => q.eq("userId", identity.subject))
-      .collect();
-
-    // Optionally, enrich with person names
-    return Promise.all(
-      relationships.map(async (rel) => {
-        const person1 = await ctx.db.get(rel.person1Id);
-        const person2 = await ctx.db.get(rel.person2Id);
-        return {
-          ...rel,
-          person1NameTh: person1?.nameTh ?? "Unknown",
-          person1NameEn: person1?.nameEn ?? "Unknown",
-          person2NameTh: person2?.nameTh ?? "Unknown",
-          person2NameEn: person2?.nameEn ?? "Unknown",
-        };
-      }),
-    );
+    return await ctx.db.query("relationships").collect();
   },
 });
 
-// Query to get data structured for visualization
-export const getVisualData = query({
-  args: {},
-  handler: async (ctx) => {
+// Update a relationship
+export const updateRelationship = mutation({
+  args: {
+    relationshipId: v.id("relationships"),
+    relationshipType: v.union(
+      v.literal("parent"),
+      v.literal("child"),
+      v.literal("sibling"),
+      v.literal("spouse"),
+    ),
+  },
+  handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
-
     if (identity === null) {
-      return { nodes: [], edges: [] };
+      throw new Error("User must be logged in to update a relationship.");
     }
 
-    const people = await ctx.db
-      .query("people")
-      .withIndex("by_userId", (q) => q.eq("userId", identity.subject))
-      .collect();
+    const relationship = await ctx.db.get(args.relationshipId);
+    if (!relationship) {
+      throw new Error("Relationship not found.");
+    }
 
-    const nodesPromises = people.map(async (person) => {
-      let portraitUrl = null;
-      if (person.portraitImageId) {
-        portraitUrl = await ctx.storage.getUrl(person.portraitImageId);
-      }
-      return {
-        id: person._id,
-        nameTh: person.nameTh,
-        nameEn: person.nameEn,
-        portraitUrl: portraitUrl,
-      };
+    await ctx.db.patch(args.relationshipId, {
+      relationshipType: args.relationshipType,
+      updatedAt: Date.now(),
+      updatedBy: identity.subject,
     });
-    const nodes = await Promise.all(nodesPromises);
 
-    const relationships = await ctx.db
-      .query("relationships")
-      .withIndex("by_userId", (q) => q.eq("userId", identity.subject))
-      .collect();
+    return args.relationshipId;
+  },
+});
 
-    const edges = relationships.map((rel) => ({
-      id: rel._id,
-      source: rel.person1Id,
-      target: rel.person2Id,
-      label: rel.type,
-    }));
+// Delete a relationship
+export const deleteRelationship = mutation({
+  args: {
+    relationshipId: v.id("relationships"),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (identity === null) {
+      throw new Error("User must be logged in to delete a relationship.");
+    }
 
-    return { nodes, edges };
+    await ctx.db.delete(args.relationshipId);
+
+    return args.relationshipId;
   },
 });

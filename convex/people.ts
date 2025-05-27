@@ -33,6 +33,10 @@ export const createPerson = mutation({
       nameEn: args.nameEn ?? args.nameTh,
       portraitImageId: args.portraitImageId,
       userId: identity.subject,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+      createdBy: identity.subject,
+      updatedBy: identity.subject,
     });
 
     return personId;
@@ -49,11 +53,7 @@ export const listPeople = query({
       return []; // Or throw new Error("User must be logged in.");
     }
 
-    const people = await ctx.db
-      .query("people")
-      .withIndex("by_userId", (q) => q.eq("userId", identity.subject))
-      .order("asc")
-      .collect();
+    const people = await ctx.db.query("people").collect();
 
     return Promise.all(
       people.map(async (person) => {
@@ -70,6 +70,38 @@ export const listPeople = query({
   },
 });
 
+// Mutation to update a person
+export const updatePerson = mutation({
+  args: {
+    personId: v.id("people"),
+    nameTh: v.string(),
+    nameEn: v.optional(v.string()),
+    portraitImageId: v.optional(v.id("_storage")),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (identity === null) {
+      throw new Error("User must be logged in to update a person.");
+    }
+
+    const person = await ctx.db.get(args.personId);
+    if (args.portraitImageId && person?.portraitImageId) {
+      await ctx.storage.delete(person.portraitImageId);
+    }
+
+    await ctx.db.patch(args.personId, {
+      nameTh: args.nameTh,
+      nameEn: args.nameEn ?? args.nameTh,
+      portraitImageId: args.portraitImageId,
+      updatedAt: Date.now(),
+      updatedBy: identity.subject,
+    });
+
+    return args.personId;
+  },
+});
+
 // Query to get a specific person by ID (useful for relationship forms)
 export const getPerson = query({
   args: { personId: v.id("people") },
@@ -77,7 +109,7 @@ export const getPerson = query({
     const identity = await ctx.auth.getUserIdentity();
 
     if (identity === null) {
-      throw new Error("User must be logged in.");
+      throw new Error("User must be logged in to get a person.");
     }
     const person = await ctx.db.get(args.personId);
     if (!person || person.userId !== identity.subject) {
@@ -89,5 +121,18 @@ export const getPerson = query({
       portraitUrl = await ctx.storage.getUrl(person.portraitImageId);
     }
     return { ...person, portraitUrl };
+  },
+});
+
+// Delete a person
+export const deletePerson = mutation({
+  args: { personId: v.id("people") },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (identity === null) {
+      throw new Error("User must be logged in to delete a person.");
+    }
+    await ctx.db.delete(args.personId);
+    return args.personId;
   },
 });

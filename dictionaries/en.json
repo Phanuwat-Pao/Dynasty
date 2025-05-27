@@ -1,19 +1,22 @@
 {
   "title": "Dynasty",
   "signIn": "Sign in",
-  "addPersonForm": {
+  "person": {
     "nameTh": "Name (Thai)",
-    "nameEn": "Name (English) (Optional)",
+    "nameEn": "Name (English)",
     "portraitImage": "Portrait Image",
     "addPerson": "Add Person",
     "adding": "Adding...",
-    "personName": "Person's Name"
+    "personName": "Person's Name",
+    "editPerson": "Edit Person",
+    "editing": "Editing...",
+    "filterPerson": "Filter Person..."
   },
-  "addRelationshipForm": {
+  "relationship": {
     "addRelationship": "Add Relationship",
     "person1": "Person 1",
     "person2": "Person 2",
-    "relationshipType": "Relationship Type",
+    "relationshipType": "Relationship",
     "samePerson": "Cannot create a relationship with the same person.",
     "failedToAddRelationship": "Failed to add relationship.",
     "adding": "Adding...",
@@ -24,7 +27,10 @@
     "searchPerson2": "Search person 2",
     "searchRelationshipType": "Search relationship type",
     "noPersonFound": "No person found.",
-    "noRelationshipTypeFound": "No relationship type found."
+    "noRelationshipTypeFound": "No relationship type found.",
+    "editRelationship": "Edit Relationship",
+    "editing": "Editing...",
+    "filterRelationship": "Filter Relationship..."
   },
   "relationshipTypes": {
     "parent": "Parent",

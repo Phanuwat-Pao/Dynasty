@@ -16,6 +16,7 @@ import {
 import { ChevronDown, Trash2 } from "lucide-react";
 import * as React from "react";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -34,62 +35,44 @@ import {
 } from "@/components/ui/table";
 import { api } from "@/convex/_generated/api";
 import { Dictionary } from "@/get-dictionary";
-import { Locale } from "@/i18n-config";
 import { Authenticated, useMutation, useQuery } from "convex/react";
-import RelationshipForm from "./relationship-form";
+import PersonForm from "./person-form";
 
-export function RelationshipTable({
-  locale,
+export function PersonTable({
   dictionary,
-  relationshipTypes,
 }: {
-  locale: Locale;
-  dictionary: Dictionary["relationship"];
-  relationshipTypes: Dictionary["relationshipTypes"];
+  dictionary: Dictionary["person"];
 }) {
-  const relationships = useQuery(api.relationships.listRelationships) || [];
   const people = useQuery(api.people.listPeople) || [];
-  const deleteRelationship = useMutation(api.relationships.deleteRelationship);
-  type Relationship = (typeof relationships)[number];
-
-  const columnHelper = createColumnHelper<Relationship>();
-  const columns: ColumnDef<Relationship>[] = [
-    {
-      accessorKey: "person1Name",
-      header: dictionary.person1,
-      cell: ({ row }) => {
-        const person = people.find((p) => p._id === row.original.person1Id);
-        return (
-          <div className="capitalize">
-            {locale === "th" ? person?.nameTh : person?.nameEn}
-          </div>
-        );
-      },
-    },
-    {
-      accessorKey: "person2Name",
-
-      header: dictionary.person2,
-      cell: ({ row }) => {
-        const person = people.find((p) => p._id === row.original.person2Id);
-        return (
-          <div className="capitalize">
-            {locale === "th" ? person?.nameTh : person?.nameEn}
-          </div>
-        );
-      },
-    },
-    {
-      accessorKey: "relationshipType",
-      header: dictionary.relationshipType,
+  const deletePerson = useMutation(api.people.deletePerson);
+  type Person = (typeof people)[number];
+  const columnHelper = createColumnHelper<Person>();
+  const columns: ColumnDef<Person>[] = [
+    columnHelper.display({
+      id: "portraitImage",
+      header: dictionary.portraitImage,
       cell: ({ row }) => (
-        <div className="capitalize">
-          {
-            relationshipTypes[
-              row.original.relationshipType as keyof typeof relationshipTypes
-            ]
-          }
-        </div>
+        <Avatar>
+          <AvatarImage
+            src={row.original?.portraitUrl ?? undefined}
+            alt="@shadcn"
+          />
+          <AvatarFallback>CN</AvatarFallback>
+        </Avatar>
+      ),
+    }),
+    {
+      accessorKey: "nameTh",
+      header: dictionary.nameTh,
+      cell: ({ row }) => (
+        <div className="capitalize">{row.original.nameTh}</div>
+      ),
+    },
+    {
+      accessorKey: "nameEn",
+      header: dictionary.nameEn,
+      cell: ({ row }) => (
+        <div className="capitalize">{row.original.nameEn}</div>
       ),
     },
     columnHelper.display({
@@ -98,17 +81,16 @@ export function RelationshipTable({
       cell: ({ row }) => {
         return (
           <div className="flex items-center gap-2">
-            <RelationshipForm
+            <PersonForm
               dictionary={dictionary}
-              relationshipTypes={relationshipTypes}
-              locale={locale}
-              relationshipId={row.original._id}
+              personId={row.original._id}
+              people={people}
             />
             <Button
               variant="outline"
               size="icon"
               onClick={() => {
-                deleteRelationship({ relationshipId: row.original._id });
+                deletePerson({ personId: row.original._id });
               }}
             >
               <Trash2 />
@@ -127,8 +109,8 @@ export function RelationshipTable({
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
-  const table = useReactTable<Relationship>({
-    data: relationships,
+  const table = useReactTable<Person>({
+    data: people,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -149,14 +131,10 @@ export function RelationshipTable({
   return (
     <Authenticated>
       <div className="w-full px-4">
-        <RelationshipForm
-          dictionary={dictionary}
-          relationshipTypes={relationshipTypes}
-          locale={locale}
-        />
+        <PersonForm dictionary={dictionary} />
         <div className="flex items-center py-4">
           <Input
-            placeholder={dictionary.filterRelationship}
+            placeholder={dictionary.filterPerson}
             onChange={(event) => table.setGlobalFilter(event.target.value)}
             className="max-w-sm"
           />

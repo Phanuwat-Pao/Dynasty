@@ -1,11 +1,10 @@
 import { UserButton } from "@clerk/nextjs";
 import { getDictionary } from "../../get-dictionary";
 import { Locale } from "../../i18n-config";
-import AddPersonForm from "./components/add-person-form";
-import AddRelationshipForm from "./components/add-relationship-form";
 import { DarkModeToggle } from "./components/dark-mode-toggle";
 import LocaleSwitcher from "./components/locale-switcher";
-import { PersonTable } from "./components/person-table";
+import { PersonTable } from "./components/people-table";
+import { RelationshipTable } from "./components/relationship-table";
 import SignInButton from "./components/sign-in-button";
 export default async function Home(props: {
   params: Promise<{ lang: Locale }>;
@@ -26,15 +25,14 @@ export default async function Home(props: {
         </div>
       </header>
       <main className="p-8 flex flex-col gap-8">
-        <div className="flex flex-row gap-4">
-          <AddPersonForm dictionary={dictionary.addPersonForm} />
-          <AddRelationshipForm
-            dictionary={dictionary.addRelationshipForm}
+        <div className="flex flex-col md:flex-row gap-4">
+          <PersonTable dictionary={dictionary.person} />
+          <RelationshipTable
+            dictionary={dictionary.relationship}
             relationshipTypes={dictionary.relationshipTypes}
             locale={lang}
           />
         </div>
-        <PersonTable />
       </main>
     </>
   );
