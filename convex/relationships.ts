@@ -1,12 +1,19 @@
 import { v } from "convex/values";
+import { getDictionary } from "../get-dictionary";
 import { mutation, query } from "./_generated/server";
+
+const dictionary = await getDictionary("th");
 
 // Mutation to add a relationship between two people
 export const addRelationship = mutation({
   args: {
     person1Id: v.id("people"),
     person2Id: v.id("people"),
-    type: v.string(),
+    type: v.union(
+      ...Object.getOwnPropertyNames(dictionary.relationshipTypes).map(
+        v.literal,
+      ),
+    ),
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
@@ -70,8 +77,10 @@ export const listRelationshipsForUser = query({
         const person2 = await ctx.db.get(rel.person2Id);
         return {
           ...rel,
-          person1Name: person1?.name ?? "Unknown",
-          person2Name: person2?.name ?? "Unknown",
+          person1NameTh: person1?.nameTh ?? "Unknown",
+          person1NameEn: person1?.nameEn ?? "Unknown",
+          person2NameTh: person2?.nameTh ?? "Unknown",
+          person2NameEn: person2?.nameEn ?? "Unknown",
         };
       }),
     );
@@ -100,7 +109,8 @@ export const getVisualData = query({
       }
       return {
         id: person._id,
-        name: person.name,
+        nameTh: person.nameTh,
+        nameEn: person.nameEn,
         portraitUrl: portraitUrl,
       };
     });

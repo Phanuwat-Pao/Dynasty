@@ -1,10 +1,12 @@
-import ConvexClientProvider from "@/components/ConvexClientProvider";
+import ConvexClientProvider from "@/app/[lang]/components/convex-client-provider";
+import { enUS, thTH } from "@clerk/localizations";
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Sarabun } from "next/font/google";
 import { i18n, type Locale } from "../../i18n-config";
+import "../globals.css";
 import { ReactScan } from "./components/react-scan";
-import "./globals.css";
+import { ThemeProvider } from "./components/theme-provider";
 
 const sarabun = Sarabun({
   variable: "--font-sarabun",
@@ -31,12 +33,22 @@ export default async function RootLayout({
   children: React.ReactNode;
   params: Promise<{ lang: Locale }>;
 }>) {
+  const { lang } = await params;
   return (
-    <html lang={(await params).lang}>
+    <html lang={lang} suppressHydrationWarning>
       <ReactScan />
       <body className={`${sarabun.variable} antialiased`}>
-        <ClerkProvider dynamic>
-          <ConvexClientProvider>{children}</ConvexClientProvider>
+        <ClerkProvider dynamic localization={lang == "th" ? thTH : enUS}>
+          <ConvexClientProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+            </ThemeProvider>
+          </ConvexClientProvider>
         </ClerkProvider>
       </body>
     </html>

@@ -1,30 +1,31 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { i18n, type Locale } from "../../../i18n-config";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { usePathname, useRouter } from "next/navigation";
+import { type Locale } from "../../../i18n-config";
 
-export default function LocaleSwitcher() {
+export default function LocaleSwitcher({ locale }: { locale: Locale }) {
   const pathname = usePathname();
+  const router = useRouter();
   const redirectedPathname = (locale: Locale) => {
     if (!pathname) return "/";
     const segments = pathname.split("/");
     segments[1] = locale;
-    return segments.join("/");
+    router.push(segments.join("/"));
   };
 
   return (
-    <div>
-      <p>Locale switcher:</p>
-      <ul>
-        {i18n.locales.map((locale) => {
-          return (
-            <li key={locale}>
-              <Link href={redirectedPathname(locale)}>{locale}</Link>
-            </li>
-          );
-        })}
-      </ul>
-    </div>
+    <ToggleGroup
+      type="single"
+      value={locale}
+      onValueChange={redirectedPathname}
+    >
+      <ToggleGroupItem value="th" aria-label="Toggle bold">
+        TH
+      </ToggleGroupItem>
+      <ToggleGroupItem value="en" aria-label="Toggle underline">
+        EN
+      </ToggleGroupItem>
+    </ToggleGroup>
   );
 }

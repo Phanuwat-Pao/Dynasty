@@ -20,6 +20,6 @@
     "isolatedModules": true,
     "noEmit": true
   },
-  "include": ["./**/*"],
+  "include": ["./**/*", "../get-dictionary.ts"],
   "exclude": ["./_generated"]
 }

@@ -17,7 +17,8 @@ export const generateUploadUrl = mutation({
 // Mutation to create a new person
 export const createPerson = mutation({
   args: {
-    name: v.string(),
+    nameTh: v.string(),
+    nameEn: v.optional(v.string()),
     portraitImageId: v.optional(v.id("_storage")),
   },
   handler: async (ctx, args) => {
@@ -28,7 +29,8 @@ export const createPerson = mutation({
     }
 
     const personId = await ctx.db.insert("people", {
-      name: args.name,
+      nameTh: args.nameTh,
+      nameEn: args.nameEn ?? args.nameTh,
       portraitImageId: args.portraitImageId,
       userId: identity.subject,
     });

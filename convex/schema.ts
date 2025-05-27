@@ -10,7 +10,8 @@ export default defineSchema({
     value: v.number(),
   }),
   people: defineTable({
-    name: v.string(),
+    nameTh: v.string(),
+    nameEn: v.string(),
     portraitImageId: v.optional(v.id("_storage")),
     userId: v.string(),
   }).index("by_userId", ["userId"]),

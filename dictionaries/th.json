@@ -1,3 +1,35 @@
 {
-  "title": "ตระกูล"
+  "title": "ตระกูล",
+  "signIn": "เข้าสู่ระบบ",
+  "addPersonForm": {
+    "nameTh": "ชื่อ (ไทย)",
+    "nameEn": "ชื่อ (อังกฤษ) (ไม่จำเป็น)",
+    "portraitImage": "รูปภาพประจำตัว",
+    "addPerson": "เพิ่มคน",
+    "adding": "กำลังเพิ่ม...",
+    "personName": "ชื่อคน"
+  },
+  "addRelationshipForm": {
+    "addRelationship": "เพิ่มความสัมพันธ์",
+    "person1": "คนที่ 1",
+    "person2": "คนที่ 2",
+    "relationshipType": "ประเภทความสัมพันธ์",
+    "samePerson": "ไม่สามารถสร้างความสัมพันธ์กับตัวเองได้",
+    "failedToAddRelationship": "ไม่สามารถเพิ่มความสัมพันธ์ได้",
+    "adding": "กำลังเพิ่ม...",
+    "selectPerson1": "เลือกคนที่ 1",
+    "selectPerson2": "เลือกคนที่ 2",
+    "selectRelationshipType": "เลือกประเภทความสัมพันธ์",
+    "searchPerson1": "ค้นหาคนที่ 1",
+    "searchPerson2": "ค้นหาคนที่ 2",
+    "searchRelationshipType": "ค้นหาประเภทความสัมพันธ์",
+    "noPersonFound": "ไม่พบคน",
+    "noRelationshipTypeFound": "ไม่พบประเภทความสัมพันธ์"
+  },
+  "relationshipTypes": {
+    "parent": "พ่อแม่",
+    "child": "ลูก",
+    "sibling": "พี่น้อง",
+    "spouse": "สมรส"
+  }
 }
