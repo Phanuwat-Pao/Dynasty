@@ -37,7 +37,9 @@ export default async function RootLayout({
   return (
     <html lang={lang} suppressHydrationWarning>
       <ReactScan />
-      <body className={`${sarabun.variable} antialiased`}>
+      <body
+        className={`${sarabun.variable} antialiased h-dvh w-dvw flex flex-col`}
+      >
         <ClerkProvider dynamic localization={lang == "th" ? thTH : enUS}>
           <ConvexClientProvider>
             <ThemeProvider

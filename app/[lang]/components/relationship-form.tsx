@@ -37,7 +37,7 @@ import { Dictionary } from "@/get-dictionary";
 import { Locale } from "@/i18n-config";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQuery } from "convex/react";
+import { Preloaded, useMutation, usePreloadedQuery } from "convex/react";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -48,11 +48,13 @@ export default function RelationshipForm({
   relationshipTypes,
   locale,
   relationshipId,
+  peoplePreloaded,
 }: {
   dictionary: Dictionary["relationship"];
   relationshipTypes: Dictionary["relationshipTypes"];
   locale: Locale;
   relationshipId?: Id<"relationships">;
+  peoplePreloaded: Preloaded<typeof api.people.listPeople>;
 }) {
   const addRelationshipFormSchema = z.object({
     person1Id: z.string().min(1),
@@ -64,7 +66,7 @@ export default function RelationshipForm({
       z.literal("spouse"),
     ]),
   });
-  const people = useQuery(api.people.listPeople) || [];
+  const people = usePreloadedQuery(peoplePreloaded) || [];
   const addRelationship = useMutation(api.relationships.addRelationship);
   const updateRelationship = useMutation(api.relationships.updateRelationship);
   const [isSubmitting, setIsSubmitting] = useState(false);

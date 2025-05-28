@@ -35,20 +35,29 @@ import {
 import { api } from "@/convex/_generated/api";
 import { Dictionary } from "@/get-dictionary";
 import { Locale } from "@/i18n-config";
-import { Authenticated, useMutation, useQuery } from "convex/react";
+import {
+  Authenticated,
+  Preloaded,
+  useMutation,
+  usePreloadedQuery,
+} from "convex/react";
 import RelationshipForm from "./relationship-form";
 
 export function RelationshipTable({
   locale,
   dictionary,
   relationshipTypes,
+  relationshipsPreloaded,
+  peoplePreloaded,
 }: {
   locale: Locale;
   dictionary: Dictionary["relationship"];
   relationshipTypes: Dictionary["relationshipTypes"];
+  relationshipsPreloaded: Preloaded<typeof api.relationships.listRelationships>;
+  peoplePreloaded: Preloaded<typeof api.people.listPeople>;
 }) {
-  const relationships = useQuery(api.relationships.listRelationships) || [];
-  const people = useQuery(api.people.listPeople) || [];
+  const relationships = usePreloadedQuery(relationshipsPreloaded) || [];
+  const people = usePreloadedQuery(peoplePreloaded) || [];
   const deleteRelationship = useMutation(api.relationships.deleteRelationship);
   type Relationship = (typeof relationships)[number];
 
@@ -103,6 +112,7 @@ export function RelationshipTable({
               relationshipTypes={relationshipTypes}
               locale={locale}
               relationshipId={row.original._id}
+              peoplePreloaded={peoplePreloaded}
             />
             <Button
               variant="outline"
@@ -153,6 +163,7 @@ export function RelationshipTable({
           dictionary={dictionary}
           relationshipTypes={relationshipTypes}
           locale={locale}
+          peoplePreloaded={peoplePreloaded}
         />
         <div className="flex items-center py-4">
           <Input

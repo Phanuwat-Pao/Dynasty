@@ -61,11 +61,6 @@ export const addRelationship = mutation({
 export const listRelationships = query({
   args: {},
   handler: async (ctx) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (identity === null) {
-      throw new Error("User must be logged in to list relationships.");
-    }
-
     return await ctx.db.query("relationships").collect();
   },
 });

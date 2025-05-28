@@ -29,8 +29,11 @@ export const createPerson = mutation({
     }
 
     const personId = await ctx.db.insert("people", {
-      nameTh: args.nameTh,
-      nameEn: args.nameEn ?? args.nameTh,
+      nameTh: args.nameTh.trim(),
+      nameEn:
+        args.nameEn && args.nameEn.trim() !== ""
+          ? args.nameEn.trim()
+          : args.nameTh.trim(),
       portraitImageId: args.portraitImageId,
       userId: identity.subject,
       createdAt: Date.now(),
@@ -47,12 +50,6 @@ export const createPerson = mutation({
 export const listPeople = query({
   args: {},
   handler: async (ctx) => {
-    const identity = await ctx.auth.getUserIdentity();
-
-    if (identity === null) {
-      return []; // Or throw new Error("User must be logged in.");
-    }
-
     const people = await ctx.db.query("people").collect();
 
     return Promise.all(
@@ -91,8 +88,11 @@ export const updatePerson = mutation({
     }
 
     await ctx.db.patch(args.personId, {
-      nameTh: args.nameTh,
-      nameEn: args.nameEn ?? args.nameTh,
+      nameTh: args.nameTh.trim(),
+      nameEn:
+        args.nameEn && args.nameEn.trim() !== ""
+          ? args.nameEn.trim()
+          : args.nameTh.trim(),
       portraitImageId: args.portraitImageId,
       updatedAt: Date.now(),
       updatedBy: identity.subject,

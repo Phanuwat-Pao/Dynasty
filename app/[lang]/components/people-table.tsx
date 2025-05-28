@@ -35,15 +35,22 @@ import {
 } from "@/components/ui/table";
 import { api } from "@/convex/_generated/api";
 import { Dictionary } from "@/get-dictionary";
-import { Authenticated, useMutation, useQuery } from "convex/react";
+import {
+  Authenticated,
+  Preloaded,
+  useMutation,
+  usePreloadedQuery,
+} from "convex/react";
 import PersonForm from "./person-form";
 
 export function PersonTable({
   dictionary,
+  peoplePreloaded,
 }: {
   dictionary: Dictionary["person"];
+  peoplePreloaded: Preloaded<typeof api.people.listPeople>;
 }) {
-  const people = useQuery(api.people.listPeople) || [];
+  const people = usePreloadedQuery(peoplePreloaded) || [];
   const deletePerson = useMutation(api.people.deletePerson);
   type Person = (typeof people)[number];
   const columnHelper = createColumnHelper<Person>();
