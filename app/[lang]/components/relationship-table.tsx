@@ -70,7 +70,13 @@ export function RelationshipTable({
         const person = people.find((p) => p._id === row.original.person1Id);
         return (
           <div className="capitalize">
-            {locale === "th" ? person?.nameTh : person?.nameEn}
+            {locale === "th"
+              ? person?.nameTh
+                ? person?.nameTh
+                : person?.nameEn
+              : person?.nameEn
+                ? person?.nameEn
+                : person?.nameTh}
           </div>
         );
       },
@@ -83,7 +89,13 @@ export function RelationshipTable({
         const person = people.find((p) => p._id === row.original.person2Id);
         return (
           <div className="capitalize">
-            {locale === "th" ? person?.nameTh : person?.nameEn}
+            {locale === "th"
+              ? person?.nameTh
+                ? person?.nameTh
+                : person?.nameEn
+              : person?.nameEn
+                ? person?.nameEn
+                : person?.nameTh}
           </div>
         );
       },

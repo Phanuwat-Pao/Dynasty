@@ -30,6 +30,7 @@
     "@react-sigma/graph-search": "^5.0.4",
     "@react-sigma/layout-core": "^5.0.4",
     "@react-sigma/layout-forceatlas2": "^5.0.4",
+    "@sigma/node-image": "^3.0.0",
     "@tanstack/react-table": "^8.21.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

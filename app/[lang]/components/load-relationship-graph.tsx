@@ -46,6 +46,7 @@ export type NodeType = {
   size: number;
   color: string;
   highlighted?: boolean;
+  image?: string;
 };
 export type EdgeType = { label: string };
 
@@ -82,6 +83,7 @@ export default function LoadRelationshipGraph({
         size: 15,
         label: locale === "th" ? person.nameTh : person.nameEn,
         color: getRandomColor(theme),
+        image: person.portraitUrl || undefined,
       });
     }
     for (const relationship of relationships) {
