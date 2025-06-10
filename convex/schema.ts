@@ -32,6 +32,7 @@ export default defineSchema({
     person1Id: v.id("people"),
     person2Id: v.id("people"),
     relationshipType: relationshipTypes,
+    number: v.number(),
     createdAt: v.number(),
     updatedAt: v.number(),
     createdBy: v.string(),
