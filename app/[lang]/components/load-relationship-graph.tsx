@@ -76,7 +76,7 @@ export default function LoadRelationshipGraph({
   relationshipTypes: Dictionary["relationshipTypes"];
   disableHoverEffect?: boolean;
 }) {
-  const { theme } = useTheme();
+  const { resolvedTheme } = useTheme();
 
   const people = usePreloadedQuery(preloadPeople);
   const relationships = usePreloadedQuery(preloadRelationships);
@@ -96,7 +96,7 @@ export default function LoadRelationshipGraph({
         y: Math.random(),
         size: 30,
         label: fullname,
-        color: getRandomColor(theme),
+        color: getRandomColor(resolvedTheme),
         image: person.portraitUrl || undefined,
       });
     }
@@ -138,7 +138,7 @@ export default function LoadRelationshipGraph({
     people,
     relationships,
     relationshipTypes,
-    theme,
+    resolvedTheme,
     registerEvents,
   ]);
 

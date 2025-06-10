@@ -39,7 +39,7 @@ export default function NetworkVisualizationInner({
   relationshipTypes: Dictionary["relationshipTypes"];
 }) {
   const [isClient, setIsClient] = useState(false);
-  const { theme } = useTheme();
+  const { resolvedTheme } = useTheme();
   const [selectedNode, setSelectedNode] = useState<string | null>(null);
   const [focusNode, setFocusNode] = useState<string | null>(null);
   useEffect(() => {
@@ -81,7 +81,7 @@ export default function NetworkVisualizationInner({
         allowInvalidContainer: true,
         renderEdgeLabels: true,
         labelColor: {
-          color: theme === "dark" ? "white" : "black",
+          color: resolvedTheme === "dark" ? "white" : "black",
         },
         defaultNodeType: "image",
         nodeProgramClasses: {
@@ -93,10 +93,10 @@ export default function NetworkVisualizationInner({
           curved: EdgeCurveProgram,
         },
         edgeLabelColor: {
-          color: theme === "dark" ? "white" : "black",
+          color: resolvedTheme === "dark" ? "white" : "black",
         },
       }) satisfies Parameters<typeof SigmaContainer>[0]["settings"],
-    [theme],
+    [resolvedTheme],
   );
 
   return (
