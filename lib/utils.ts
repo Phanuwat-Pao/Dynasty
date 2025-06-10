@@ -6,6 +6,23 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export function getNickname<
+  T extends {
+    nicknameTh?: string;
+    nicknameEn?: string;
+  },
+>(locale: Locale, person: T) {
+  const nickname =
+    locale === "th"
+      ? person.nicknameTh
+        ? person.nicknameTh
+        : person.nicknameEn
+      : person.nicknameEn
+        ? person.nicknameEn
+        : person.nicknameTh;
+  return nickname;
+}
+
 export function getFullName<
   T extends {
     nicknameTh?: string;

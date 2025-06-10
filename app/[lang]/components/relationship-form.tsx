@@ -167,8 +167,10 @@ export default function RelationshipForm({
                           {field.value
                             ? getFullName(
                                 locale,
-                                availablePeopleForPerson1.find(
-                                  (person) => person._id === field.value,
+                                availablePeopleForPerson1.find((person) =>
+                                  getFullName(locale, person).includes(
+                                    field.value,
+                                  ),
                                 )!,
                               )
                             : dictionary.selectPerson1}
@@ -234,8 +236,10 @@ export default function RelationshipForm({
                           {field.value
                             ? getFullName(
                                 locale,
-                                availablePeopleForPerson2.find(
-                                  (person) => person._id === field.value,
+                                availablePeopleForPerson2.find((person) =>
+                                  getFullName(locale, person).includes(
+                                    field.value,
+                                  ),
                                 )!,
                               )
                             : dictionary.selectPerson2}
