@@ -7,16 +7,8 @@ import { v } from "convex/values";
 // The schema provides more precise TypeScript types.
 
 export const relationshipTypes = v.union(
-  v.literal("father"),
-  v.literal("mother"),
-  v.literal("son"),
-  v.literal("daughter"),
-  v.literal("olderBrother"),
-  v.literal("youngerBrother"),
-  v.literal("olderSister"),
-  v.literal("youngerSister"),
-  v.literal("husband"),
-  v.literal("wife"),
+  v.literal("child"),
+  v.literal("partner"),
 );
 
 export default defineSchema({

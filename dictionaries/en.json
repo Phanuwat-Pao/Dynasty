@@ -14,7 +14,11 @@
     "personName": "Person's Name",
     "editPerson": "Edit Person",
     "editing": "Editing...",
-    "filterPerson": "Filter Person..."
+    "filterPerson": "Filter Person...",
+    "gender": "Gender",
+    "male": "Male",
+    "female": "Female",
+    "unknown": "Unknown"
   },
   "relationship": {
     "addRelationship": "Add Relationship",
@@ -37,15 +41,7 @@
     "filterRelationship": "Filter Relationship..."
   },
   "relationshipTypes": {
-    "father": "Father",
-    "mother": "Mother",
-    "son": "Son",
-    "daughter": "Daughter",
-    "olderBrother": "Older Brother",
-    "youngerBrother": "Younger Brother",
-    "olderSister": "Older Sister",
-    "youngerSister": "Younger Sister",
-    "husband": "Husband",
-    "wife": "Wife"
+    "child": "Child",
+    "partner": "Partner"
   }
 }

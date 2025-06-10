@@ -59,18 +59,7 @@ export default function RelationshipForm({
   const addRelationshipFormSchema = z.object({
     person1Id: z.string().min(1),
     person2Id: z.string().min(1),
-    relationshipType: z.union([
-      z.literal("father"),
-      z.literal("mother"),
-      z.literal("son"),
-      z.literal("daughter"),
-      z.literal("olderBrother"),
-      z.literal("youngerBrother"),
-      z.literal("olderSister"),
-      z.literal("youngerSister"),
-      z.literal("husband"),
-      z.literal("wife"),
-    ]),
+    relationshipType: z.union([z.literal("child"), z.literal("partner")]),
   });
   const people = usePreloadedQuery(peoplePreloaded) || [];
   const addRelationship = useMutation(api.relationships.addRelationship);

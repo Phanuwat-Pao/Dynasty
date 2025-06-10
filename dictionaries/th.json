@@ -14,7 +14,11 @@
     "personName": "ชื่อคน",
     "editPerson": "แก้ไขคน",
     "editing": "กำลังแก้ไข...",
-    "filterPerson": "ค้นหาคน..."
+    "filterPerson": "ค้นหาคน...",
+    "gender": "เพศ",
+    "male": "ชาย",
+    "female": "หญิง",
+    "unknown": "ไม่ระบุ"
   },
   "relationship": {
     "addRelationship": "เพิ่มความสัมพันธ์",
@@ -37,15 +41,7 @@
     "filterRelationship": "ค้นหาความสัมพันธ์..."
   },
   "relationshipTypes": {
-    "father": "พ่อ",
-    "mother": "แม่",
-    "son": "ลูกชาย",
-    "daughter": "ลูกสาว",
-    "olderBrother": "พี่ชาย",
-    "youngerBrother": "น้องชาย",
-    "olderSister": "พี่สาว",
-    "youngerSister": "น้องสาว",
-    "husband": "สามี",
-    "wife": "ภรรยา"
+    "child": "ลูก",
+    "partner": "คู่สมรส"
   }
 }
