@@ -35,6 +35,7 @@ import {
 import { api } from "@/convex/_generated/api";
 import { Dictionary } from "@/get-dictionary";
 import { Locale } from "@/i18n-config";
+import { getFullName } from "@/lib/utils";
 import {
   Authenticated,
   Preloaded,
@@ -70,13 +71,7 @@ export function RelationshipTable({
         const person = people.find((p) => p._id === row.original.person1Id);
         return (
           <div className="capitalize">
-            {locale === "th"
-              ? person?.nameTh
-                ? person?.nameTh
-                : person?.nameEn
-              : person?.nameEn
-                ? person?.nameEn
-                : person?.nameTh}
+            {person ? getFullName(locale, person) : ""}
           </div>
         );
       },
@@ -89,13 +84,7 @@ export function RelationshipTable({
         const person = people.find((p) => p._id === row.original.person2Id);
         return (
           <div className="capitalize">
-            {locale === "th"
-              ? person?.nameTh
-                ? person?.nameTh
-                : person?.nameEn
-              : person?.nameEn
-                ? person?.nameEn
-                : person?.nameTh}
+            {person ? getFullName(locale, person) : ""}
           </div>
         );
       },

@@ -35,7 +35,7 @@ import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { Dictionary } from "@/get-dictionary";
 import { Locale } from "@/i18n-config";
-import { cn } from "@/lib/utils";
+import { cn, getFullName } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Preloaded, useMutation, usePreloadedQuery } from "convex/react";
 import { Check, ChevronsUpDown } from "lucide-react";
@@ -60,10 +60,16 @@ export default function RelationshipForm({
     person1Id: z.string().min(1),
     person2Id: z.string().min(1),
     relationshipType: z.union([
-      z.literal("parent"),
-      z.literal("child"),
-      z.literal("sibling"),
-      z.literal("spouse"),
+      z.literal("father"),
+      z.literal("mother"),
+      z.literal("son"),
+      z.literal("daughter"),
+      z.literal("olderBrother"),
+      z.literal("youngerBrother"),
+      z.literal("olderSister"),
+      z.literal("youngerSister"),
+      z.literal("husband"),
+      z.literal("wife"),
     ]),
   });
   const people = usePreloadedQuery(peoplePreloaded) || [];
@@ -166,9 +172,12 @@ export default function RelationshipForm({
                           )}
                         >
                           {field.value
-                            ? availablePeopleForPerson1.find(
-                                (person) => person._id === field.value,
-                              )?.[locale === "th" ? "nameTh" : "nameEn"]
+                            ? getFullName(
+                                locale,
+                                availablePeopleForPerson1.find(
+                                  (person) => person._id === field.value,
+                                )!,
+                              )
                             : dictionary.selectPerson1}
                           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
@@ -190,7 +199,7 @@ export default function RelationshipForm({
                                   form.setValue("person1Id", person._id);
                                 }}
                               >
-                                {person[locale === "th" ? "nameTh" : "nameEn"]}
+                                {getFullName(locale, person)}
                                 <Check
                                   className={cn(
                                     "ml-auto",
@@ -230,9 +239,12 @@ export default function RelationshipForm({
                           )}
                         >
                           {field.value
-                            ? availablePeopleForPerson2.find(
-                                (person) => person._id === field.value,
-                              )?.[locale === "th" ? "nameTh" : "nameEn"]
+                            ? getFullName(
+                                locale,
+                                availablePeopleForPerson2.find(
+                                  (person) => person._id === field.value,
+                                )!,
+                              )
                             : dictionary.selectPerson2}
                           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
@@ -254,7 +266,7 @@ export default function RelationshipForm({
                                   form.setValue("person2Id", person._id);
                                 }}
                               >
-                                {person[locale === "th" ? "nameTh" : "nameEn"]}
+                                {getFullName(locale, person)}
                                 <Check
                                   className={cn(
                                     "ml-auto",

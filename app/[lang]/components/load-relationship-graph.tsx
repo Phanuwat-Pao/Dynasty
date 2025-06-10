@@ -2,6 +2,7 @@
 import { api } from "@/convex/_generated/api";
 import { Dictionary } from "@/get-dictionary";
 import { Locale } from "@/i18n-config";
+import { getFullName } from "@/lib/utils";
 import {
   useLoadGraph,
   useRegisterEvents,
@@ -9,8 +10,12 @@ import {
   useSigma,
 } from "@react-sigma/core";
 import "@react-sigma/core/lib/style.css";
+import {
+  DEFAULT_EDGE_CURVATURE,
+  indexParallelEdgesIndex,
+} from "@sigma/edge-curve";
 import { Preloaded, usePreloadedQuery } from "convex/react";
-import Graph from "graphology";
+import { DirectedGraph } from "graphology";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
@@ -48,7 +53,14 @@ export type NodeType = {
   highlighted?: boolean;
   image?: string;
 };
-export type EdgeType = { label: string };
+export type EdgeType = {
+  type?: string;
+  label?: string;
+  size?: number;
+  curvature?: number;
+  parallelIndex?: number;
+  parallelMaxIndex?: number;
+};
 
 // Component that load the graph
 export default function LoadRelationshipGraph({
@@ -75,13 +87,15 @@ export default function LoadRelationshipGraph({
   const sigma = useSigma();
 
   useEffect(() => {
-    const graph = new Graph<NodeType, EdgeType>();
+    const graph = new DirectedGraph<NodeType, EdgeType>();
     for (const person of people) {
+      const fullname = getFullName(locale, person);
+
       graph.addNode(person._id, {
         x: Math.random(),
         y: Math.random(),
-        size: 15,
-        label: locale === "th" ? person.nameTh : person.nameEn,
+        size: 30,
+        label: fullname,
         color: getRandomColor(theme),
         image: person.portraitUrl || undefined,
       });
@@ -89,8 +103,30 @@ export default function LoadRelationshipGraph({
     for (const relationship of relationships) {
       graph.addEdge(relationship.person1Id, relationship.person2Id, {
         label: relationshipTypes[relationship.relationshipType],
+        size: 5,
       });
     }
+    // Use dedicated helper to identify parallel edges:
+    indexParallelEdgesIndex(graph, {
+      edgeIndexAttribute: "parallelIndex",
+      edgeMaxIndexAttribute: "parallelMaxIndex",
+    });
+
+    // Adapt types and curvature of parallel edges for rendering:
+    graph.forEachEdge((edge, { parallelIndex, parallelMaxIndex }) => {
+      if (typeof parallelIndex === "number") {
+        graph.mergeEdgeAttributes(edge, {
+          type: "curved",
+          curvature:
+            DEFAULT_EDGE_CURVATURE +
+            (3 * DEFAULT_EDGE_CURVATURE * parallelIndex) /
+              (parallelMaxIndex || 1),
+        });
+      } else {
+        graph.setEdgeAttribute(edge, "type", "straight");
+      }
+    });
+
     loadGraph(graph);
     registerEvents({
       enterNode: (event) => setHoveredNode(event.node),

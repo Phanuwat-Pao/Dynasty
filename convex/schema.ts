@@ -6,34 +6,45 @@ import { v } from "convex/values";
 // app will continue to work.
 // The schema provides more precise TypeScript types.
 
+export const relationshipTypes = v.union(
+  v.literal("father"),
+  v.literal("mother"),
+  v.literal("son"),
+  v.literal("daughter"),
+  v.literal("olderBrother"),
+  v.literal("youngerBrother"),
+  v.literal("olderSister"),
+  v.literal("youngerSister"),
+  v.literal("husband"),
+  v.literal("wife"),
+);
+
 export default defineSchema({
   people: defineTable({
-    nameTh: v.string(),
-    nameEn: v.string(),
+    nicknameTh: v.optional(v.string()),
+    nicknameEn: v.optional(v.string()),
+    prenameTh: v.optional(v.string()),
+    prenameEn: v.optional(v.string()),
+    givenNameTh: v.optional(v.string()),
+    givenNameEn: v.optional(v.string()),
+    familyNameTh: v.optional(v.string()),
+    familyNameEn: v.optional(v.string()),
     portraitImageId: v.optional(v.id("_storage")),
-    userId: v.string(),
     createdAt: v.number(),
     updatedAt: v.number(),
     createdBy: v.string(),
     updatedBy: v.string(),
-  }).index("by_userId", ["userId"]),
+  }).index("by_fullname", ["givenNameTh", "familyNameTh"]),
 
   relationships: defineTable({
     person1Id: v.id("people"),
     person2Id: v.id("people"),
-    relationshipType: v.union(
-      v.literal("parent"),
-      v.literal("child"),
-      v.literal("sibling"),
-      v.literal("spouse"),
-    ), // e.g., "friend", "colleague", "family"
-    userId: v.string(),
+    relationshipType: relationshipTypes,
     createdAt: v.number(),
     updatedAt: v.number(),
     createdBy: v.string(),
     updatedBy: v.string(),
   })
-    .index("by_userId", ["userId"])
     .index("by_person1Id", ["person1Id"])
     .index("by_person2Id", ["person2Id"]),
 });

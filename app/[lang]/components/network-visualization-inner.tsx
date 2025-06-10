@@ -12,10 +12,12 @@ import "@react-sigma/core/lib/style.css";
 import type { GraphSearchOption } from "@react-sigma/graph-search";
 import { GraphSearch } from "@react-sigma/graph-search";
 import "@react-sigma/graph-search/lib/style.css";
+import EdgeCurveProgram from "@sigma/edge-curve";
 import { createNodeImageProgram } from "@sigma/node-image";
 import type { Preloaded } from "convex/react";
 import { useTheme } from "next-themes";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { EdgeArrowProgram } from "sigma/rendering";
 import FocusOnNode from "./focus-on-node";
 import ForceAtlas2Layout from "./force-atlas-2-layout";
 import LoadRelationshipGraph from "./load-relationship-graph";
@@ -84,6 +86,14 @@ export default function NetworkVisualizationInner({
         defaultNodeType: "image",
         nodeProgramClasses: {
           image: createNodeImageProgram(),
+        },
+        defaultEdgeType: "straight",
+        edgeProgramClasses: {
+          straight: EdgeArrowProgram,
+          curved: EdgeCurveProgram,
+        },
+        edgeLabelColor: {
+          color: theme === "dark" ? "white" : "black",
         },
       }) satisfies Parameters<typeof SigmaContainer>[0]["settings"],
     [theme],

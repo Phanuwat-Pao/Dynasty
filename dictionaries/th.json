@@ -2,8 +2,12 @@
   "title": "ตระกูล",
   "signIn": "เข้าสู่ระบบ",
   "person": {
-    "nameTh": "ชื่อ (ไทย)",
-    "nameEn": "ชื่อ (อังกฤษ)",
+    "thai": "ไทย",
+    "english": "อังกฤษ",
+    "nickname": "ชื่อเล่น",
+    "prename": "คำนำหน้า",
+    "givenName": "ชื่อ",
+    "familyName": "นามสกุล",
     "portraitImage": "รูปภาพประจำตัว",
     "addPerson": "เพิ่มคน",
     "adding": "กำลังเพิ่ม...",
@@ -33,9 +37,15 @@
     "filterRelationship": "ค้นหาความสัมพันธ์..."
   },
   "relationshipTypes": {
-    "parent": "พ่อแม่",
-    "child": "ลูก",
-    "sibling": "พี่น้อง",
-    "spouse": "สมรส"
+    "father": "พ่อ",
+    "mother": "แม่",
+    "son": "ลูกชาย",
+    "daughter": "ลูกสาว",
+    "olderBrother": "พี่ชาย",
+    "youngerBrother": "น้องชาย",
+    "olderSister": "พี่สาว",
+    "youngerSister": "น้องสาว",
+    "husband": "สามี",
+    "wife": "ภรรยา"
   }
 }

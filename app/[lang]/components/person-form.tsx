@@ -19,6 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 import { api } from "@/convex/_generated/api";
 import { Doc, Id } from "@/convex/_generated/dataModel";
 import { Dictionary } from "@/get-dictionary";
@@ -30,8 +31,14 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 const personFormSchema = z.object({
-  nameTh: z.string().min(1),
-  nameEn: z.string().optional(),
+  nicknameTh: z.string().optional(),
+  nicknameEn: z.string().optional(),
+  prenameTh: z.string().optional(),
+  prenameEn: z.string().optional(),
+  givenNameTh: z.string().optional(),
+  givenNameEn: z.string().optional(),
+  familyNameTh: z.string().optional(),
+  familyNameEn: z.string().optional(),
   portraitImage: z
     .instanceof(File)
     .optional()
@@ -60,15 +67,35 @@ export default function PersonForm({
   const personForm = useForm<z.infer<typeof personFormSchema>>({
     resolver: zodResolver(personFormSchema),
     defaultValues: {
-      nameTh: personId ? people?.find((p) => p._id === personId)?.nameTh : "",
-      nameEn: personId ? people?.find((p) => p._id === personId)?.nameEn : "",
+      nicknameTh: personId
+        ? people?.find((p) => p._id === personId)?.nicknameTh
+        : "",
+      nicknameEn: personId
+        ? people?.find((p) => p._id === personId)?.nicknameEn
+        : "",
+      prenameTh: personId
+        ? people?.find((p) => p._id === personId)?.prenameTh
+        : "",
+      prenameEn: personId
+        ? people?.find((p) => p._id === personId)?.prenameEn
+        : "",
+      givenNameTh: personId
+        ? people?.find((p) => p._id === personId)?.givenNameTh
+        : "",
+      givenNameEn: personId
+        ? people?.find((p) => p._id === personId)?.givenNameEn
+        : "",
+      familyNameTh: personId
+        ? people?.find((p) => p._id === personId)?.familyNameTh
+        : "",
+      familyNameEn: personId
+        ? people?.find((p) => p._id === personId)?.familyNameEn
+        : "",
       portraitImage: undefined,
     },
   });
 
   async function onSubmit(data: z.infer<typeof personFormSchema>) {
-    console.log(data);
-    if (!data.nameTh.trim() || isSubmitting) return;
     setIsSubmitting(true);
 
     let portraitImageId: Id<"_storage"> | undefined = undefined;
@@ -100,14 +127,26 @@ export default function PersonForm({
       if (personId) {
         await updatePerson({
           personId: personId,
-          nameTh: data.nameTh.trim(),
-          nameEn: data.nameEn?.trim(),
+          nicknameTh: data.nicknameTh?.trim(),
+          nicknameEn: data.nicknameEn?.trim(),
+          prenameTh: data.prenameTh?.trim(),
+          prenameEn: data.prenameEn?.trim(),
+          givenNameTh: data.givenNameTh?.trim(),
+          givenNameEn: data.givenNameEn?.trim(),
+          familyNameTh: data.familyNameTh?.trim(),
+          familyNameEn: data.familyNameEn?.trim(),
           portraitImageId,
         });
       } else {
         await createPerson({
-          nameTh: data.nameTh.trim(),
-          nameEn: data.nameEn?.trim(),
+          nicknameTh: data.nicknameTh?.trim(),
+          nicknameEn: data.nicknameEn?.trim(),
+          prenameTh: data.prenameTh?.trim(),
+          prenameEn: data.prenameEn?.trim(),
+          givenNameTh: data.givenNameTh?.trim(),
+          givenNameEn: data.givenNameEn?.trim(),
+          familyNameTh: data.familyNameTh?.trim(),
+          familyNameEn: data.familyNameEn?.trim(),
           portraitImageId,
         });
       }
@@ -145,12 +184,14 @@ export default function PersonForm({
             onSubmit={personForm.handleSubmit(onSubmit)}
             className="space-y-8"
           >
+            <Separator />
+            <h1>{dictionary.thai}</h1>
             <FormField
               control={personForm.control}
-              name="nameTh"
+              name="nicknameTh"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{dictionary.nameTh}</FormLabel>
+                  <FormLabel>{dictionary.nickname}</FormLabel>
                   <FormControl>
                     <Input placeholder={dictionary.personName} {...field} />
                   </FormControl>
@@ -161,10 +202,10 @@ export default function PersonForm({
             />
             <FormField
               control={personForm.control}
-              name="nameEn"
+              name="prenameTh"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{dictionary.nameEn}</FormLabel>
+                  <FormLabel>{dictionary.prename}</FormLabel>
                   <FormControl>
                     <Input placeholder={dictionary.personName} {...field} />
                   </FormControl>
@@ -173,6 +214,93 @@ export default function PersonForm({
                 </FormItem>
               )}
             />
+            <FormField
+              control={personForm.control}
+              name="givenNameTh"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{dictionary.givenName}</FormLabel>
+                  <FormControl>
+                    <Input placeholder={dictionary.personName} {...field} />
+                  </FormControl>
+                  <FormDescription />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={personForm.control}
+              name="familyNameTh"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{dictionary.familyName}</FormLabel>
+                  <FormControl>
+                    <Input placeholder={dictionary.personName} {...field} />
+                  </FormControl>
+                  <FormDescription />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Separator />
+            <h1>{dictionary.english}</h1>
+            <FormField
+              control={personForm.control}
+              name="nicknameEn"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{dictionary.nickname}</FormLabel>
+                  <FormControl>
+                    <Input placeholder={dictionary.personName} {...field} />
+                  </FormControl>
+                  <FormDescription />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={personForm.control}
+              name="prenameEn"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{dictionary.prename}</FormLabel>
+                  <FormControl>
+                    <Input placeholder={dictionary.personName} {...field} />
+                  </FormControl>
+                  <FormDescription />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={personForm.control}
+              name="givenNameEn"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{dictionary.givenName}</FormLabel>
+                  <FormControl>
+                    <Input placeholder={dictionary.personName} {...field} />
+                  </FormControl>
+                  <FormDescription />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={personForm.control}
+              name="familyNameEn"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{dictionary.familyName}</FormLabel>
+                  <FormControl>
+                    <Input placeholder={dictionary.personName} {...field} />
+                  </FormControl>
+                  <FormDescription />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Separator />
             <FormField
               control={personForm.control}
               name="portraitImage"
@@ -198,10 +326,7 @@ export default function PersonForm({
               )}
             />
             <DialogFooter>
-              <Button
-                type="submit"
-                disabled={isSubmitting || !personForm.watch("nameTh").trim()}
-              >
+              <Button type="submit" disabled={isSubmitting}>
                 {isSubmitting ? dictionary.adding : dictionary.addPerson}
               </Button>
             </DialogFooter>

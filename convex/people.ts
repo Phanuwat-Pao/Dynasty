@@ -17,8 +17,14 @@ export const generateUploadUrl = mutation({
 // Mutation to create a new person
 export const createPerson = mutation({
   args: {
-    nameTh: v.string(),
-    nameEn: v.optional(v.string()),
+    nicknameTh: v.optional(v.string()),
+    nicknameEn: v.optional(v.string()),
+    prenameTh: v.optional(v.string()),
+    prenameEn: v.optional(v.string()),
+    givenNameTh: v.optional(v.string()),
+    givenNameEn: v.optional(v.string()),
+    familyNameTh: v.optional(v.string()),
+    familyNameEn: v.optional(v.string()),
     portraitImageId: v.optional(v.id("_storage")),
   },
   handler: async (ctx, args) => {
@@ -29,13 +35,36 @@ export const createPerson = mutation({
     }
 
     const personId = await ctx.db.insert("people", {
-      nameTh: args.nameTh.trim(),
-      nameEn:
-        args.nameEn && args.nameEn.trim() !== ""
-          ? args.nameEn.trim()
-          : args.nameTh.trim(),
+      nicknameTh: args.nicknameTh?.trim()
+        ? args.nicknameTh?.trim()
+        : args.nicknameEn?.trim(),
+      nicknameEn:
+        args.nicknameEn && args.nicknameEn.trim() !== ""
+          ? args.nicknameEn.trim()
+          : args.nicknameTh?.trim(),
+      prenameTh: args.prenameTh?.trim()
+        ? args.prenameTh?.trim()
+        : args.prenameEn?.trim(),
+      prenameEn:
+        args.prenameEn && args.prenameEn.trim() !== ""
+          ? args.prenameEn.trim()
+          : args.prenameTh?.trim(),
+      givenNameTh: args.givenNameTh?.trim()
+        ? args.givenNameTh?.trim()
+        : args.givenNameEn?.trim(),
+      givenNameEn:
+        args.givenNameEn && args.givenNameEn.trim() !== ""
+          ? args.givenNameEn.trim()
+          : args.givenNameTh?.trim(),
+      familyNameTh: args.familyNameTh?.trim()
+        ? args.familyNameTh?.trim()
+        : args.familyNameEn?.trim(),
+      familyNameEn:
+        args.familyNameEn && args.familyNameEn.trim() !== ""
+          ? args.familyNameEn.trim()
+          : args.familyNameTh?.trim(),
+
       portraitImageId: args.portraitImageId,
-      userId: identity.subject,
       createdAt: Date.now(),
       updatedAt: Date.now(),
       createdBy: identity.subject,
@@ -71,8 +100,14 @@ export const listPeople = query({
 export const updatePerson = mutation({
   args: {
     personId: v.id("people"),
-    nameTh: v.string(),
-    nameEn: v.optional(v.string()),
+    nicknameTh: v.optional(v.string()),
+    nicknameEn: v.optional(v.string()),
+    prenameTh: v.optional(v.string()),
+    prenameEn: v.optional(v.string()),
+    givenNameTh: v.optional(v.string()),
+    givenNameEn: v.optional(v.string()),
+    familyNameTh: v.optional(v.string()),
+    familyNameEn: v.optional(v.string()),
     portraitImageId: v.optional(v.id("_storage")),
   },
   handler: async (ctx, args) => {
@@ -88,39 +123,36 @@ export const updatePerson = mutation({
     }
 
     await ctx.db.patch(args.personId, {
-      nameTh: args.nameTh.trim(),
-      nameEn:
-        args.nameEn && args.nameEn.trim() !== ""
-          ? args.nameEn.trim()
-          : args.nameTh.trim(),
+      nicknameTh: args.nicknameTh?.trim()
+        ? args.nicknameTh?.trim()
+        : args.nicknameEn?.trim(),
+      nicknameEn:
+        args.nicknameEn && args.nicknameEn.trim() !== ""
+          ? args.nicknameEn.trim()
+          : args.nicknameTh?.trim(),
+      prenameTh: args.prenameTh?.trim()
+        ? args.prenameTh?.trim()
+        : args.prenameEn?.trim(),
+      givenNameTh: args.givenNameTh?.trim()
+        ? args.givenNameTh?.trim()
+        : args.givenNameEn?.trim(),
+      givenNameEn:
+        args.givenNameEn && args.givenNameEn.trim() !== ""
+          ? args.givenNameEn.trim()
+          : args.givenNameTh?.trim(),
+      familyNameTh: args.familyNameTh?.trim()
+        ? args.familyNameTh?.trim()
+        : args.familyNameEn?.trim(),
+      familyNameEn:
+        args.familyNameEn && args.familyNameEn.trim() !== ""
+          ? args.familyNameEn.trim()
+          : args.familyNameTh?.trim(),
       portraitImageId: args.portraitImageId,
       updatedAt: Date.now(),
       updatedBy: identity.subject,
     });
 
     return args.personId;
-  },
-});
-
-// Query to get a specific person by ID (useful for relationship forms)
-export const getPerson = query({
-  args: { personId: v.id("people") },
-  handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
-
-    if (identity === null) {
-      throw new Error("User must be logged in to get a person.");
-    }
-    const person = await ctx.db.get(args.personId);
-    if (!person || person.userId !== identity.subject) {
-      return null; // Or throw error if person not found or not owned by user
-    }
-
-    let portraitUrl = null;
-    if (person.portraitImageId) {
-      portraitUrl = await ctx.storage.getUrl(person.portraitImageId);
-    }
-    return { ...person, portraitUrl };
   },
 });
 
@@ -131,6 +163,24 @@ export const deletePerson = mutation({
     const identity = await ctx.auth.getUserIdentity();
     if (identity === null) {
       throw new Error("User must be logged in to delete a person.");
+    }
+    const person = await ctx.db.get(args.personId);
+    if (person?.portraitImageId) {
+      await ctx.storage.delete(person.portraitImageId);
+    }
+    const relationships = await ctx.db
+      .query("relationships")
+      .withIndex("by_person1Id", (q) => q.eq("person1Id", args.personId))
+      .collect();
+    for (const relationship of relationships) {
+      await ctx.db.delete(relationship._id);
+    }
+    const relationships2 = await ctx.db
+      .query("relationships")
+      .withIndex("by_person2Id", (q) => q.eq("person2Id", args.personId))
+      .collect();
+    for (const relationship of relationships2) {
+      await ctx.db.delete(relationship._id);
     }
     await ctx.db.delete(args.personId);
     return args.personId;

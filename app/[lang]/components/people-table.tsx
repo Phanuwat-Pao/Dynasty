@@ -68,20 +68,75 @@ export function PersonTable({
         </Avatar>
       ),
     }),
-    {
-      accessorKey: "nameTh",
-      header: dictionary.nameTh,
-      cell: ({ row }) => (
-        <div className="capitalize">{row.original.nameTh}</div>
-      ),
-    },
-    {
-      accessorKey: "nameEn",
-      header: dictionary.nameEn,
-      cell: ({ row }) => (
-        <div className="capitalize">{row.original.nameEn}</div>
-      ),
-    },
+    columnHelper.group({
+      header: dictionary.thai,
+      columns: [
+        {
+          accessorKey: "nicknameTh",
+          header: dictionary.nickname,
+          cell: ({ row }) => (
+            <div className="capitalize">{row.original.nicknameTh}</div>
+          ),
+        },
+
+        {
+          accessorKey: "prenameTh",
+          header: dictionary.prename,
+          cell: ({ row }) => (
+            <div className="capitalize">{row.original.prenameTh}</div>
+          ),
+        },
+        {
+          accessorKey: "givenNameTh",
+          header: dictionary.givenName,
+          cell: ({ row }) => (
+            <div className="capitalize">{row.original.givenNameTh}</div>
+          ),
+        },
+        {
+          accessorKey: "familyNameTh",
+          header: dictionary.familyName,
+          cell: ({ row }) => (
+            <div className="capitalize">{row.original.familyNameTh}</div>
+          ),
+        },
+      ],
+    }),
+    columnHelper.group({
+      header: dictionary.english,
+      columns: [
+        {
+          accessorKey: "nicknameEn",
+          header: dictionary.nickname,
+          cell: ({ row }) => (
+            <div className="capitalize">{row.original.nicknameEn}</div>
+          ),
+        },
+        {
+          accessorKey: "prenameEn",
+          header: dictionary.prename,
+          cell: ({ row }) => (
+            <div className="capitalize">{row.original.prenameEn}</div>
+          ),
+        },
+
+        {
+          accessorKey: "givenNameEn",
+          header: dictionary.givenName,
+          cell: ({ row }) => (
+            <div className="capitalize">{row.original.givenNameEn}</div>
+          ),
+        },
+
+        {
+          accessorKey: "familyNameEn",
+          header: dictionary.familyName,
+          cell: ({ row }) => (
+            <div className="capitalize">{row.original.familyNameEn}</div>
+          ),
+        },
+      ],
+    }),
     columnHelper.display({
       id: "actions",
       enableHiding: false,
@@ -179,7 +234,7 @@ export function PersonTable({
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => {
                     return (
-                      <TableHead key={header.id}>
+                      <TableHead key={header.id} colSpan={header.colSpan}>
                         {header.isPlaceholder
                           ? null
                           : flexRender(

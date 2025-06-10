@@ -1,17 +1,13 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+import { relationshipTypes } from "./schema";
 
 // Mutation to add a relationship between two people
 export const addRelationship = mutation({
   args: {
     person1Id: v.id("people"),
     person2Id: v.id("people"),
-    relationshipType: v.union(
-      v.literal("parent"),
-      v.literal("child"),
-      v.literal("sibling"),
-      v.literal("spouse"),
-    ),
+    relationshipType: relationshipTypes,
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
@@ -24,16 +20,14 @@ export const addRelationship = mutation({
     const person1 = await ctx.db.get(args.person1Id);
     const person2 = await ctx.db.get(args.person2Id);
 
-    if (
-      !person1 ||
-      person1.userId !== identity.subject ||
-      !person2 ||
-      person2.userId !== identity.subject
-    ) {
-      throw new Error(
-        "One or both persons not found or not owned by the user.",
-      );
+    if (!person1) {
+      throw new Error("Person 1 not found.");
     }
+
+    if (!person2) {
+      throw new Error("Person 2 not found.");
+    }
+
     if (args.person1Id === args.person2Id) {
       throw new Error("Cannot create a relationship with oneself.");
     }
@@ -46,7 +40,6 @@ export const addRelationship = mutation({
       person1Id: args.person1Id,
       person2Id: args.person2Id,
       relationshipType: args.relationshipType,
-      userId: identity.subject,
       createdAt: Date.now(),
       updatedAt: Date.now(),
       createdBy: identity.subject,
@@ -69,12 +62,7 @@ export const listRelationships = query({
 export const updateRelationship = mutation({
   args: {
     relationshipId: v.id("relationships"),
-    relationshipType: v.union(
-      v.literal("parent"),
-      v.literal("child"),
-      v.literal("sibling"),
-      v.literal("spouse"),
-    ),
+    relationshipType: relationshipTypes,
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();

@@ -2,8 +2,12 @@
   "title": "Dynasty",
   "signIn": "Sign in",
   "person": {
-    "nameTh": "Name (Thai)",
-    "nameEn": "Name (English)",
+    "thai": "Thai",
+    "english": "English",
+    "nickname": "Nickname",
+    "prename": "Prename",
+    "givenName": "Given Name",
+    "familyName": "Family Name",
     "portraitImage": "Portrait Image",
     "addPerson": "Add Person",
     "adding": "Adding...",
@@ -33,9 +37,15 @@
     "filterRelationship": "Filter Relationship..."
   },
   "relationshipTypes": {
-    "parent": "Parent",
-    "child": "Child",
-    "sibling": "Sibling",
-    "spouse": "Spouse"
+    "father": "Father",
+    "mother": "Mother",
+    "son": "Son",
+    "daughter": "Daughter",
+    "olderBrother": "Older Brother",
+    "youngerBrother": "Younger Brother",
+    "olderSister": "Older Sister",
+    "youngerSister": "Younger Sister",
+    "husband": "Husband",
+    "wife": "Wife"
   }
 }
