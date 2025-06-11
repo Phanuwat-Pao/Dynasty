@@ -3,6 +3,7 @@ import { api } from "@/convex/_generated/api";
 import { Dictionary } from "@/get-dictionary";
 import { Locale } from "@/i18n-config";
 import { drawLabel } from "@/lib/draw";
+import { useSession } from "@clerk/nextjs";
 import {
   ControlsContainer,
   FullScreenControl,
@@ -43,7 +44,7 @@ export default function NetworkVisualizationInner({
   const { resolvedTheme } = useTheme();
   const [selectedNode, setSelectedNode] = useState<string | null>(null);
   const [focusNode, setFocusNode] = useState<string | null>(null);
-
+  const { session } = useSession();
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -103,9 +104,10 @@ export default function NetworkVisualizationInner({
     <>
       {isClient ? (
         <SigmaContainer
-          className="h-screen w-full"
           style={{
             backgroundColor: "var(--background)",
+            height: session ? "90dvh" : "100%",
+            width: "100%",
           }}
           settings={settings}
         >
