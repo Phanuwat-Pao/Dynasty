@@ -61,7 +61,7 @@ export default function RelationshipForm({
     person1Id: z.string().min(1),
     person2Id: z.string().min(1),
     relationshipType: z.union([z.literal("child"), z.literal("partner")]),
-    number: z.number().min(1),
+    number: z.number({ coerce: true }).min(1),
   });
   const people = usePreloadedQuery(peoplePreloaded) || [];
   const addRelationship = useMutation(api.relationships.addRelationship);
@@ -72,6 +72,9 @@ export default function RelationshipForm({
 
   const form = useForm<z.infer<typeof addRelationshipFormSchema>>({
     resolver: zodResolver(addRelationshipFormSchema),
+    defaultValues: {
+      number: 1,
+    },
   });
 
   async function onSubmit(data: z.infer<typeof addRelationshipFormSchema>) {
