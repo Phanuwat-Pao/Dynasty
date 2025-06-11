@@ -3,17 +3,17 @@ import { UserButton } from "@clerk/nextjs";
 import { preloadQuery } from "convex/nextjs";
 import { getDictionary } from "../../get-dictionary";
 import { Locale } from "../../i18n-config";
+import AuthenticatedSection from "./components/authenticated-section";
 import { DarkModeToggle } from "./components/dark-mode-toggle";
 import LocaleSwitcher from "./components/locale-switcher";
 import NetworkVisualization from "./components/network-visualization";
 import SignInButton from "./components/sign-in-button";
-import Tables from "./components/tables";
 
 export default async function Home(props: {
   params: Promise<{ lang: Locale }>;
 }) {
-  const peoplePreloaded = await preloadQuery(api.people.listPeople);
-  const relationshipsPreloaded = await preloadQuery(
+  const preloadedPeople = await preloadQuery(api.people.listPeople);
+  const preloadedRelationships = await preloadQuery(
     api.relationships.listRelationships,
   );
 
@@ -33,22 +33,19 @@ export default async function Home(props: {
         </div>
       </header>
       <main className="p-8 flex flex-col gap-8 h-full w-full">
-        <Tables
+        <AuthenticatedSection
           dictionary={dictionary}
-          preloadedPeople={peoplePreloaded}
-          preloadedRelationships={relationshipsPreloaded}
+          preloadedPeople={preloadedPeople}
+          preloadedRelationships={preloadedRelationships}
           locale={lang}
         />
         <NetworkVisualization
           locale={lang}
-          preloadedPeople={peoplePreloaded}
-          preloadedRelationships={relationshipsPreloaded}
+          preloadedPeople={preloadedPeople}
+          preloadedRelationships={preloadedRelationships}
           relationshipTypes={dictionary.relationshipTypes}
         />
       </main>
-      <div className="fixed bottom-0 right-0 text-sm text-gray-500">
-        {process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA}
-      </div>
     </>
   );
 }

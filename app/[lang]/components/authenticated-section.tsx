@@ -1,3 +1,4 @@
+"use client";
 import { api } from "@/convex/_generated/api";
 import { Dictionary } from "@/get-dictionary";
 import { Locale } from "@/i18n-config";
@@ -5,7 +6,7 @@ import { Authenticated, Preloaded } from "convex/react";
 import { PersonTable } from "./people-table";
 import { RelationshipTable } from "./relationship-table";
 
-export default function Tables({
+export default function AuthenticatedSection({
   locale,
   preloadedPeople,
   preloadedRelationships,

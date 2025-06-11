@@ -52,6 +52,9 @@ export default async function RootLayout({
             </ThemeProvider>
           </ConvexClientProvider>
         </ClerkProvider>
+        <div className="fixed bottom-0 right-0 text-sm text-gray-500">
+          {process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA}
+        </div>
       </body>
     </html>
   );
