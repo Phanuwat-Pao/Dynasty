@@ -25,6 +25,7 @@ import { Doc, Id } from "@/convex/_generated/dataModel";
 import { Dictionary } from "@/get-dictionary";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "convex/react";
+import { SquarePen } from "lucide-react";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -168,7 +169,7 @@ export default function PersonForm({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline">
-          {personId ? dictionary.editPerson : dictionary.addPerson}
+          {personId ? <SquarePen /> : dictionary.addPerson}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">

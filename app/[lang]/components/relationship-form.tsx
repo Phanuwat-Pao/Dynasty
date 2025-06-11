@@ -38,7 +38,7 @@ import { Locale } from "@/i18n-config";
 import { cn, getFullName } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Preloaded, useMutation, usePreloadedQuery } from "convex/react";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown, SquarePen } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
@@ -127,9 +127,7 @@ export default function RelationshipForm({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline">
-          {relationshipId
-            ? dictionary.editRelationship
-            : dictionary.addRelationship}
+          {relationshipId ? <SquarePen /> : dictionary.addRelationship}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">

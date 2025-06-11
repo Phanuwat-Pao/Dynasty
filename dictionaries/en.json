@@ -34,8 +34,7 @@
     "noRelationshipTypeFound": "No relationship type found.",
     "editRelationship": "Edit Relationship",
     "editing": "Editing...",
-    "filterRelationship": "Filter Relationship...",
-    "number": "Number"
+    "filterRelationship": "Filter Relationship..."
   },
   "relationshipTypes": {
     "father": "Father",
