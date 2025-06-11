@@ -102,11 +102,6 @@ export function RelationshipTable({
         </div>
       ),
     },
-    {
-      accessorKey: "number",
-      header: dictionary.number,
-      cell: ({ row }) => row.original.number,
-    },
     columnHelper.display({
       id: "actions",
       enableHiding: false,
