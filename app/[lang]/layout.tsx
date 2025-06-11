@@ -37,7 +37,9 @@ export default async function RootLayout({
   return (
     <html lang={lang} suppressHydrationWarning>
       <ReactScan />
-      <body className={`${sarabun.variable} antialiased w-dvw flex flex-col`}>
+      <body
+        className={`${sarabun.variable} antialiased h-full w-dvw flex flex-col`}
+      >
         <ClerkProvider dynamic localization={lang == "th" ? thTH : enUS}>
           <ConvexClientProvider>
             <ThemeProvider
@@ -47,12 +49,12 @@ export default async function RootLayout({
               disableTransitionOnChange
             >
               {children}
+              <div className="fixed bottom-0 right-0 text-sm text-gray-500">
+                {process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA}
+              </div>
             </ThemeProvider>
           </ConvexClientProvider>
         </ClerkProvider>
-        <div className="fixed bottom-0 right-0 text-sm text-gray-500">
-          {process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA}
-        </div>
       </body>
     </html>
   );
