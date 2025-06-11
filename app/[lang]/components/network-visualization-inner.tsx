@@ -106,7 +106,7 @@ export default function NetworkVisualizationInner({
         <SigmaContainer
           style={{
             backgroundColor: "var(--background)",
-            height: session ? "90dvh" : "100%",
+            height: "90dvh",
             width: "100%",
           }}
           settings={settings}
