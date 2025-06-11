@@ -72,7 +72,7 @@ export default function LoadRelationshipGraph({
       graph.addNode(person._id, {
         x: Math.random(),
         y: Math.random(),
-        size: 30,
+        size: 20,
         label: fullname,
         color: getRandomColor(resolvedTheme),
         image: person.portraitUrl || undefined,
@@ -83,7 +83,7 @@ export default function LoadRelationshipGraph({
     for (const relationship of relationships) {
       graph.addEdge(relationship.person1Id, relationship.person2Id, {
         label: `${relationshipTypes[relationship.relationshipType]}`,
-        size: 5,
+        size: 3,
       });
     }
     // Use dedicated helper to identify parallel edges:
