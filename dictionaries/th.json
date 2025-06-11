@@ -14,11 +14,7 @@
     "personName": "ชื่อคน",
     "editPerson": "แก้ไขคน",
     "editing": "กำลังแก้ไข...",
-    "filterPerson": "ค้นหาคน...",
-    "gender": "เพศ",
-    "male": "ชาย",
-    "female": "หญิง",
-    "unknown": "ไม่ระบุ"
+    "filterPerson": "ค้นหาคน..."
   },
   "relationship": {
     "addRelationship": "เพิ่มความสัมพันธ์",
@@ -42,7 +38,7 @@
     "number": "คนที่"
   },
   "relationshipTypes": {
-    "child": "ลูก",
-    "partner": "คู่สมรส"
+    "father": "พ่อ",
+    "mother": "แม่"
   }
 }

@@ -8,7 +8,6 @@ export const addRelationship = mutation({
     person1Id: v.id("people"),
     person2Id: v.id("people"),
     relationshipType: relationshipTypes,
-    number: v.number(),
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
@@ -45,7 +44,6 @@ export const addRelationship = mutation({
       updatedAt: Date.now(),
       createdBy: identity.subject,
       updatedBy: identity.subject,
-      number: args.number,
     });
 
     return relationshipId;
@@ -65,7 +63,6 @@ export const updateRelationship = mutation({
   args: {
     relationshipId: v.id("relationships"),
     relationshipType: relationshipTypes,
-    number: v.number(),
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();

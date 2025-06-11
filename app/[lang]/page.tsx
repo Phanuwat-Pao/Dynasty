@@ -1,7 +1,6 @@
 import { api } from "@/convex/_generated/api";
 import { UserButton } from "@clerk/nextjs";
 import { preloadQuery } from "convex/nextjs";
-import getConfig from "next/config";
 import { getDictionary } from "../../get-dictionary";
 import { Locale } from "../../i18n-config";
 import { DarkModeToggle } from "./components/dark-mode-toggle";
@@ -10,8 +9,6 @@ import NetworkVisualization from "./components/network-visualization";
 import { PersonTable } from "./components/people-table";
 import { RelationshipTable } from "./components/relationship-table";
 import SignInButton from "./components/sign-in-button";
-
-const { publicRuntimeConfig } = getConfig();
 
 export default async function Home(props: {
   params: Promise<{ lang: Locale }>;
@@ -57,7 +54,7 @@ export default async function Home(props: {
           relationshipTypes={dictionary.relationshipTypes}
         />
         <div className="absolute bottom-0 right-0 text-sm text-gray-500">
-          {publicRuntimeConfig?.version}
+          {process.env.VERCEL_GIT_COMMIT_SHA}
         </div>
       </main>
     </>

@@ -2,6 +2,7 @@
 import { api } from "@/convex/_generated/api";
 import { Dictionary } from "@/get-dictionary";
 import { Locale } from "@/i18n-config";
+import { drawLabel } from "@/lib/draw";
 import {
   ControlsContainer,
   FullScreenControl,
@@ -80,9 +81,7 @@ export default function NetworkVisualizationInner({
       ({
         allowInvalidContainer: true,
         renderEdgeLabels: true,
-        labelColor: {
-          color: resolvedTheme === "dark" ? "white" : "black",
-        },
+        defaultDrawNodeLabel: drawLabel,
         defaultNodeType: "image",
         nodeProgramClasses: {
           image: createNodeImageProgram(),

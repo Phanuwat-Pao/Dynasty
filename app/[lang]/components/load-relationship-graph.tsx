@@ -2,6 +2,7 @@
 import { api } from "@/convex/_generated/api";
 import { Dictionary } from "@/get-dictionary";
 import { Locale } from "@/i18n-config";
+import { getRandomColor } from "@/lib/draw";
 import { getFullName } from "@/lib/utils";
 import {
   useLoadGraph,
@@ -19,31 +20,6 @@ import { DirectedGraph } from "graphology";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
-function toHex(c: number) {
-  const hex = c.toString(16);
-  return hex.length === 1 ? "0" + hex : hex;
-}
-
-function getRandomColor(mode = "light") {
-  const baseColor = mode === "light" ? 75 : 175; // Adjust base for light/dark
-  const colorVariation = 55; // Range of variation
-
-  let r = Math.floor(Math.random() * colorVariation) + baseColor;
-  let g = Math.floor(Math.random() * colorVariation) + baseColor;
-  let b = Math.floor(Math.random() * colorVariation) + baseColor;
-
-  // Ensure values stay within 0-255 range
-  r = Math.min(255, r);
-  g = Math.min(255, g);
-  b = Math.min(255, b);
-
-  // Convert to hex format
-
-  const hexColor = "#" + toHex(r) + toHex(g) + toHex(b);
-
-  return hexColor;
-}
-
 export type NodeType = {
   x: number;
   y: number;
@@ -52,6 +28,8 @@ export type NodeType = {
   color: string;
   highlighted?: boolean;
   image?: string;
+  labelColor?: string;
+  theme?: string;
 };
 export type EdgeType = {
   type?: string;
@@ -98,11 +76,13 @@ export default function LoadRelationshipGraph({
         label: fullname,
         color: getRandomColor(resolvedTheme),
         image: person.portraitUrl || undefined,
+        labelColor: resolvedTheme === "dark" ? "white" : "black",
+        theme: resolvedTheme,
       });
     }
     for (const relationship of relationships) {
       graph.addEdge(relationship.person1Id, relationship.person2Id, {
-        label: relationshipTypes[relationship.relationshipType],
+        label: `${relationshipTypes[relationship.relationshipType]}`,
         size: 5,
       });
     }
@@ -153,8 +133,10 @@ export default function LoadRelationshipGraph({
             node === hoveredNode ||
             graph.neighbors(hoveredNode).includes(node)
           ) {
+            newData.labelColor = data.theme === "dark" ? "black" : "white";
             newData.highlighted = true;
           } else {
+            newData.labelColor = data.theme === "dark" ? "white" : "black";
             newData.color = "#E2E2E2";
             newData.highlighted = false;
           }

@@ -26,7 +26,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import {
   Popover,
   PopoverContent,
@@ -60,7 +59,7 @@ export default function RelationshipForm({
   const addRelationshipFormSchema = z.object({
     person1Id: z.string().min(1),
     person2Id: z.string().min(1),
-    relationshipType: z.union([z.literal("child"), z.literal("partner")]),
+    relationshipType: z.union([z.literal("father"), z.literal("mother")]),
     number: z.number({ coerce: true }).min(1),
   });
   const people = usePreloadedQuery(peoplePreloaded) || [];
@@ -98,14 +97,12 @@ export default function RelationshipForm({
         await updateRelationship({
           relationshipId: relationshipId as Id<"relationships">,
           relationshipType: data.relationshipType,
-          number: data.number,
         });
       } else {
         await addRelationship({
           person1Id: data.person1Id as Id<"people">,
           person2Id: data.person2Id as Id<"people">,
           relationshipType: data.relationshipType,
-          number: data.number,
         });
       }
       form.reset();
@@ -352,20 +349,6 @@ export default function RelationshipForm({
                       </Command>
                     </PopoverContent>
                   </Popover>
-                  <FormDescription />
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="number"
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel>{dictionary.number}</FormLabel>
-                  <FormControl>
-                    <Input type="number" {...field} />
-                  </FormControl>
                   <FormDescription />
                   <FormMessage />
                 </FormItem>
