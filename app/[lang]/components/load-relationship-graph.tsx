@@ -43,21 +43,21 @@ export type EdgeType = {
 // Component that load the graph
 export default function LoadRelationshipGraph({
   locale,
-  preloadPeople,
-  preloadRelationships,
+  preloadedPeople,
+  preloadedRelationships,
   relationshipTypes,
   disableHoverEffect,
 }: {
   locale: Locale;
-  preloadPeople: Preloaded<typeof api.people.listPeople>;
-  preloadRelationships: Preloaded<typeof api.relationships.listRelationships>;
+  preloadedPeople: Preloaded<typeof api.people.listPeople>;
+  preloadedRelationships: Preloaded<typeof api.relationships.listRelationships>;
   relationshipTypes: Dictionary["relationshipTypes"];
   disableHoverEffect?: boolean;
 }) {
   const { resolvedTheme } = useTheme();
 
-  const people = usePreloadedQuery(preloadPeople);
-  const relationships = usePreloadedQuery(preloadRelationships);
+  const people = usePreloadedQuery(preloadedPeople);
+  const relationships = usePreloadedQuery(preloadedRelationships);
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
   const loadGraph = useLoadGraph<NodeType, EdgeType>();
   const setSettings = useSetSettings<NodeType, EdgeType>();

@@ -6,9 +6,8 @@ import { Locale } from "../../i18n-config";
 import { DarkModeToggle } from "./components/dark-mode-toggle";
 import LocaleSwitcher from "./components/locale-switcher";
 import NetworkVisualization from "./components/network-visualization";
-import { PersonTable } from "./components/people-table";
-import { RelationshipTable } from "./components/relationship-table";
 import SignInButton from "./components/sign-in-button";
+import Tables from "./components/tables";
 
 export default async function Home(props: {
   params: Promise<{ lang: Locale }>;
@@ -34,23 +33,16 @@ export default async function Home(props: {
         </div>
       </header>
       <main className="p-8 flex flex-col gap-8 h-full w-full">
-        <div className="flex flex-col md:flex-row gap-4">
-          <PersonTable
-            dictionary={dictionary.person}
-            peoplePreloaded={peoplePreloaded}
-          />
-          <RelationshipTable
-            dictionary={dictionary.relationship}
-            relationshipTypes={dictionary.relationshipTypes}
-            locale={lang}
-            relationshipsPreloaded={relationshipsPreloaded}
-            peoplePreloaded={peoplePreloaded}
-          />
-        </div>
+        <Tables
+          dictionary={dictionary}
+          preloadedPeople={peoplePreloaded}
+          preloadedRelationships={relationshipsPreloaded}
+          locale={lang}
+        />
         <NetworkVisualization
           locale={lang}
-          preloadPeople={peoplePreloaded}
-          preloadRelationships={relationshipsPreloaded}
+          preloadedPeople={peoplePreloaded}
+          preloadedRelationships={relationshipsPreloaded}
           relationshipTypes={dictionary.relationshipTypes}
         />
       </main>

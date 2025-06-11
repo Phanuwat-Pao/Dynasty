@@ -30,13 +30,13 @@ export type NetworkVisualizationProps = Parameters<
 // Component that display the graph
 export default function NetworkVisualizationInner({
   locale,
-  preloadPeople,
-  preloadRelationships,
+  preloadedPeople,
+  preloadedRelationships,
   relationshipTypes,
 }: {
   locale: Locale;
-  preloadPeople: Preloaded<typeof api.people.listPeople>;
-  preloadRelationships: Preloaded<typeof api.relationships.listRelationships>;
+  preloadedPeople: Preloaded<typeof api.people.listPeople>;
+  preloadedRelationships: Preloaded<typeof api.relationships.listRelationships>;
   relationshipTypes: Dictionary["relationshipTypes"];
 }) {
   const [isClient, setIsClient] = useState(false);
@@ -111,8 +111,8 @@ export default function NetworkVisualizationInner({
         >
           <LoadRelationshipGraph
             locale={locale}
-            preloadPeople={preloadPeople}
-            preloadRelationships={preloadRelationships}
+            preloadedPeople={preloadedPeople}
+            preloadedRelationships={preloadedRelationships}
             relationshipTypes={relationshipTypes}
           />
           <ForceAtlas2Layout />

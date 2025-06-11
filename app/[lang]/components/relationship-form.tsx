@@ -48,13 +48,13 @@ export default function RelationshipForm({
   relationshipTypes,
   locale,
   relationshipId,
-  peoplePreloaded,
+  preloadedPeople,
 }: {
   dictionary: Dictionary["relationship"];
   relationshipTypes: Dictionary["relationshipTypes"];
   locale: Locale;
   relationshipId?: Id<"relationships">;
-  peoplePreloaded: Preloaded<typeof api.people.listPeople>;
+  preloadedPeople: Preloaded<typeof api.people.listPeople>;
 }) {
   const addRelationshipFormSchema = z.object({
     person1Id: z.string().min(1),
@@ -62,7 +62,7 @@ export default function RelationshipForm({
     relationshipType: z.union([z.literal("father"), z.literal("mother")]),
     number: z.number({ coerce: true }).min(1),
   });
-  const people = usePreloadedQuery(peoplePreloaded) || [];
+  const people = usePreloadedQuery(preloadedPeople) || [];
   const addRelationship = useMutation(api.relationships.addRelationship);
   const updateRelationship = useMutation(api.relationships.updateRelationship);
   const [isSubmitting, setIsSubmitting] = useState(false);
