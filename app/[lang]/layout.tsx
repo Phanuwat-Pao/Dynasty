@@ -49,9 +49,6 @@ export default async function RootLayout({
               disableTransitionOnChange
             >
               {children}
-              <div className="fixed bottom-0 right-0 text-sm text-gray-500">
-                {process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA}
-              </div>
             </ThemeProvider>
           </ConvexClientProvider>
         </ClerkProvider>
