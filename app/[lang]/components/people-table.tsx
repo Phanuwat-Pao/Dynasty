@@ -3,6 +3,7 @@
 import {
   ColumnDef,
   ColumnFiltersState,
+  PaginationState,
   SortingState,
   VisibilityState,
   createColumnHelper,
@@ -36,6 +37,7 @@ import {
 import { api } from "@/convex/_generated/api";
 import { Dictionary } from "@/get-dictionary";
 import { Preloaded, useMutation, usePreloadedQuery } from "convex/react";
+import Paginator from "./paginator";
 import PersonForm from "./person-form";
 
 export function PersonTable({
@@ -47,6 +49,10 @@ export function PersonTable({
 }) {
   const people = usePreloadedQuery(preloadedPeople) || [];
   const deletePerson = useMutation(api.people.deletePerson);
+  const [pagination] = React.useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+  });
   type Person = (typeof people)[number];
   const columnHelper = createColumnHelper<Person>();
   const columns: ColumnDef<Person>[] = [
@@ -182,6 +188,7 @@ export function PersonTable({
       columnFilters,
       columnVisibility,
       rowSelection,
+      pagination,
     },
   });
 
@@ -276,24 +283,12 @@ export function PersonTable({
           {table.getFilteredSelectedRowModel().rows.length} of{" "}
           {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
-        <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
-        </div>
+        <Paginator
+          currentPage={table.getState().pagination.pageIndex + 1}
+          totalPages={table.getPageCount()}
+          onPageChange={(pageNumber) => table.setPageIndex(pageNumber - 1)}
+          showPreviousNext
+        />
       </div>
     </div>
   );

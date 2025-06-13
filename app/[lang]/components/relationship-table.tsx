@@ -3,6 +3,7 @@
 import {
   ColumnDef,
   ColumnFiltersState,
+  PaginationState,
   SortingState,
   VisibilityState,
   createColumnHelper,
@@ -37,6 +38,7 @@ import { Dictionary } from "@/get-dictionary";
 import { Locale } from "@/i18n-config";
 import { getFullName } from "@/lib/utils";
 import { Preloaded, useMutation, usePreloadedQuery } from "convex/react";
+import Paginator from "./paginator";
 import RelationshipForm from "./relationship-form";
 
 export function RelationshipTable({
@@ -54,6 +56,10 @@ export function RelationshipTable({
 }) {
   const relationships = usePreloadedQuery(preloadedRelationships) || [];
   const people = usePreloadedQuery(preloadedPeople) || [];
+  const [pagination] = React.useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+  });
   const deleteRelationship = useMutation(api.relationships.deleteRelationship);
   type Relationship = (typeof relationships)[number];
 
@@ -149,6 +155,7 @@ export function RelationshipTable({
       columnFilters,
       columnVisibility,
       rowSelection,
+      pagination,
     },
   });
 
@@ -248,24 +255,12 @@ export function RelationshipTable({
           {table.getFilteredSelectedRowModel().rows.length} of{" "}
           {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
-        <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
-        </div>
+        <Paginator
+          currentPage={table.getState().pagination.pageIndex + 1}
+          totalPages={table.getPageCount()}
+          onPageChange={(pageNumber) => table.setPageIndex(pageNumber - 1)}
+          showPreviousNext
+        />
       </div>
     </div>
   );
