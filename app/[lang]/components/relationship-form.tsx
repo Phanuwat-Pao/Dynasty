@@ -159,13 +159,13 @@ export default function RelationshipForm({
             <PersonFormField
               form={form}
               dictionary={{
-                person: dictionary.person2,
-                selectPerson: dictionary.selectPerson2,
-                searchPerson: dictionary.searchPerson2,
+                person: dictionary.person1,
+                selectPerson: dictionary.selectPerson1,
+                searchPerson: dictionary.searchPerson1,
                 noPersonFound: dictionary.noPersonFound,
               }}
               locale={locale}
-              availablePeopleForPerson={availablePeopleForPerson2}
+              availablePeopleForPerson={availablePeopleForPerson1}
             />
             <div>{dictionary.is}</div>
             {locale === "th" && person2FormField}
