@@ -2,6 +2,7 @@ import ConvexClientProvider from "@/app/[lang]/components/convex-client-provider
 import { enUS, thTH } from "@clerk/localizations";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { Sarabun } from "next/font/google";
 import { i18n, type Locale } from "../../i18n-config";
@@ -56,6 +57,7 @@ export default async function RootLayout({
           {process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA}
         </div>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
