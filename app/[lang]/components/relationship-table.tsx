@@ -137,12 +137,13 @@ export function RelationshipTable({
     },
   });
 
-  let columns: ColumnDef<Relationship>[];
-  if (locale === "th") {
-    columns = [person1Name, is, relationshipType, person2Name, actions];
-  } else {
-    columns = [person1Name, is, person2Name, relationshipType, actions];
-  }
+  const columns: ColumnDef<Relationship>[] = React.useMemo(() => {
+    if (locale === "th") {
+      return [person1Name, is, relationshipType, person2Name, actions];
+    } else {
+      return [person1Name, is, person2Name, relationshipType, actions];
+    }
+  }, [locale]);
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
