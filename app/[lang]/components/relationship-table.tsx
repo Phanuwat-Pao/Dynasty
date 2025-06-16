@@ -132,8 +132,8 @@ export function RelationshipTable({
   const is: ColumnDef<Relationship> = columnHelper.display({
     id: "is",
     enableHiding: false,
-    cell: ({ row }) => {
-      return <div></div>;
+    cell: () => {
+      return <div>{dictionary.is}</div>;
     },
   });
 
