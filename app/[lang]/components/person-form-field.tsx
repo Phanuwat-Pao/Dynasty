@@ -40,6 +40,7 @@ export default function PersonFormField({
   dictionary,
   locale,
   availablePeopleForPerson,
+  name,
 }: {
   form: UseFormReturn<z.infer<typeof addRelationshipFormSchema>>;
   dictionary: {
@@ -50,11 +51,12 @@ export default function PersonFormField({
   };
   locale: Locale;
   availablePeopleForPerson: (typeof api.people.listPeople)["_returnType"];
+  name: "person1Id" | "person2Id";
 }) {
   return (
     <FormField
       control={form.control}
-      name="person1Id"
+      name={name}
       render={({ field }) => (
         <FormItem className="flex flex-col">
           <FormLabel>{dictionary.person}</FormLabel>

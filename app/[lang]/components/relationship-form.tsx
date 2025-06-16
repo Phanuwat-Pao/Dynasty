@@ -122,6 +122,7 @@ export default function RelationshipForm({
 
   const person2FormField = (
     <PersonFormField
+      name="person2Id"
       form={form}
       dictionary={{
         person: dictionary.person2,
@@ -157,6 +158,7 @@ export default function RelationshipForm({
             </h3>
             {error && <p className="text-sm text-red-600 mb-2">{error}</p>}
             <PersonFormField
+              name="person1Id"
               form={form}
               dictionary={{
                 person: dictionary.person1,
