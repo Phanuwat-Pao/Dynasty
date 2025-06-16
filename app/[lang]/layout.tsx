@@ -1,13 +1,13 @@
 import ConvexClientProvider from "@/app/[lang]/components/convex-client-provider";
 import { enUS, thTH } from "@clerk/localizations";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 import { Sarabun } from "next/font/google";
 import { i18n, type Locale } from "../../i18n-config";
 import "../globals.css";
 import { ReactScan } from "./components/react-scan";
 import { ThemeProvider } from "./components/theme-provider";
-
 const sarabun = Sarabun({
   variable: "--font-sarabun",
   subsets: ["latin"],
@@ -55,6 +55,7 @@ export default async function RootLayout({
         <div className="fixed bottom-0 right-0 text-sm text-gray-500">
           {process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA}
         </div>
+        <Analytics />
       </body>
     </html>
   );
