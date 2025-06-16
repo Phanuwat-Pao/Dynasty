@@ -170,7 +170,7 @@ export default function RelationshipForm({
               availablePeopleForPerson={availablePeopleForPerson1}
             />
             <div>{dictionary.is}</div>
-            {locale === "th" && person2FormField}
+            {locale !== "th" && person2FormField}
             <FormField
               control={form.control}
               name="relationshipType"
@@ -245,7 +245,7 @@ export default function RelationshipForm({
                 </FormItem>
               )}
             />
-            {locale !== "th" && person2FormField}
+            {locale === "th" && person2FormField}
             <DialogFooter>
               <Button
                 type="submit"
