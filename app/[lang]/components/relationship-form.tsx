@@ -35,13 +35,16 @@ import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { Dictionary } from "@/get-dictionary";
 import { Locale } from "@/i18n-config";
-import { cn, getFullName } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Preloaded, useMutation, usePreloadedQuery } from "convex/react";
 import { Check, ChevronsUpDown, SquarePen } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
+import PersonFormField, {
+  addRelationshipFormSchema,
+} from "./person-form-field";
 
 export default function RelationshipForm({
   dictionary,
@@ -56,12 +59,6 @@ export default function RelationshipForm({
   relationshipId?: Id<"relationships">;
   preloadedPeople: Preloaded<typeof api.people.listPeople>;
 }) {
-  const addRelationshipFormSchema = z.object({
-    person1Id: z.string().min(1),
-    person2Id: z.string().min(1),
-    relationshipType: z.union([z.literal("father"), z.literal("mother")]),
-    number: z.number({ coerce: true }).min(1),
-  });
   const people = usePreloadedQuery(preloadedPeople) || [];
   const addRelationship = useMutation(api.relationships.addRelationship);
   const updateRelationship = useMutation(api.relationships.updateRelationship);
@@ -123,6 +120,20 @@ export default function RelationshipForm({
     (p) => p._id !== form.getValues("person2Id"),
   );
 
+  const person2FormField = (
+    <PersonFormField
+      form={form}
+      dictionary={{
+        person: dictionary.person2,
+        selectPerson: dictionary.selectPerson2,
+        searchPerson: dictionary.searchPerson2,
+        noPersonFound: dictionary.noPersonFound,
+      }}
+      locale={locale}
+      availablePeopleForPerson={availablePeopleForPerson2}
+    />
+  );
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -145,139 +156,19 @@ export default function RelationshipForm({
               {dictionary.addRelationship}
             </h3>
             {error && <p className="text-sm text-red-600 mb-2">{error}</p>}
-            <FormField
-              control={form.control}
-              name="person1Id"
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel>{dictionary.person1}</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant="outline"
-                          role="combobox"
-                          className={cn(
-                            "w-[200px] justify-between",
-                            !field.value && "text-muted-foreground",
-                          )}
-                        >
-                          {field.value
-                            ? getFullName(
-                                locale,
-                                availablePeopleForPerson1.find(
-                                  (person) => person._id === field.value,
-                                )!,
-                              )
-                            : dictionary.selectPerson1}
-                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-[200px] p-0">
-                      <Command>
-                        <CommandInput placeholder={dictionary.searchPerson1} />
-                        <CommandList>
-                          <CommandEmpty>
-                            {dictionary.noPersonFound}
-                          </CommandEmpty>
-                          <CommandGroup>
-                            {availablePeopleForPerson1.map((person) => (
-                              <CommandItem
-                                value={person._id}
-                                key={person._id}
-                                onSelect={() => {
-                                  form.setValue("person1Id", person._id);
-                                }}
-                              >
-                                {getFullName(locale, person)}
-                                <Check
-                                  className={cn(
-                                    "ml-auto",
-                                    person._id === field.value
-                                      ? "opacity-100"
-                                      : "opacity-0",
-                                  )}
-                                />
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
-                  <FormDescription />
-
-                  <FormMessage />
-                </FormItem>
-              )}
+            <PersonFormField
+              form={form}
+              dictionary={{
+                person: dictionary.person2,
+                selectPerson: dictionary.selectPerson2,
+                searchPerson: dictionary.searchPerson2,
+                noPersonFound: dictionary.noPersonFound,
+              }}
+              locale={locale}
+              availablePeopleForPerson={availablePeopleForPerson2}
             />
-            <FormField
-              control={form.control}
-              name="person2Id"
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel>{dictionary.person2}</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant="outline"
-                          role="combobox"
-                          className={cn(
-                            "w-[200px] justify-between",
-                            !field.value && "text-muted-foreground",
-                          )}
-                        >
-                          {field.value
-                            ? getFullName(
-                                locale,
-                                availablePeopleForPerson2.find(
-                                  (person) => person._id === field.value,
-                                )!,
-                              )
-                            : dictionary.selectPerson2}
-                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-[200px] p-0">
-                      <Command>
-                        <CommandInput placeholder={dictionary.searchPerson2} />
-                        <CommandList>
-                          <CommandEmpty>
-                            {dictionary.noPersonFound}
-                          </CommandEmpty>
-                          <CommandGroup>
-                            {availablePeopleForPerson2.map((person) => (
-                              <CommandItem
-                                value={person._id}
-                                key={person._id}
-                                onSelect={() => {
-                                  form.setValue("person2Id", person._id);
-                                }}
-                              >
-                                {getFullName(locale, person)}
-                                <Check
-                                  className={cn(
-                                    "ml-auto",
-                                    person._id === field.value
-                                      ? "opacity-100"
-                                      : "opacity-0",
-                                  )}
-                                />
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
-                  <FormDescription />
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div>{dictionary.is}</div>
+            {locale === "th" && person2FormField}
             <FormField
               control={form.control}
               name="relationshipType"
@@ -352,6 +243,7 @@ export default function RelationshipForm({
                 </FormItem>
               )}
             />
+            {locale !== "th" && person2FormField}
             <DialogFooter>
               <Button
                 type="submit"

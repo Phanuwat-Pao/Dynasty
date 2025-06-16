@@ -34,7 +34,8 @@
     "noRelationshipTypeFound": "ไม่พบประเภทความสัมพันธ์",
     "editRelationship": "แก้ไขความสัมพันธ์",
     "editing": "กำลังแก้ไข...",
-    "filterRelationship": "ค้นหาความสัมพันธ์..."
+    "filterRelationship": "ค้นหาความสัมพันธ์...",
+    "is": "เป็น"
   },
   "relationshipTypes": {
     "father": "พ่อ",

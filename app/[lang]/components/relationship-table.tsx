@@ -64,72 +64,85 @@ export function RelationshipTable({
   type Relationship = (typeof relationships)[number];
 
   const columnHelper = createColumnHelper<Relationship>();
-  const columns: ColumnDef<Relationship>[] = [
-    {
-      accessorKey: "person1Name",
-      header: dictionary.person1,
-      cell: ({ row }) => {
-        const person = people.find((p) => p._id === row.original.person1Id);
-        return (
-          <div className="capitalize">
-            {person ? getFullName(locale, person) : ""}
-          </div>
-        );
-      },
-    },
-    {
-      accessorKey: "person2Name",
-
-      header: dictionary.person2,
-      cell: ({ row }) => {
-        const person = people.find((p) => p._id === row.original.person2Id);
-        return (
-          <div className="capitalize">
-            {person ? getFullName(locale, person) : ""}
-          </div>
-        );
-      },
-    },
-    {
-      accessorKey: "relationshipType",
-      header: dictionary.relationshipType,
-      cell: ({ row }) => (
+  const person1Name: ColumnDef<Relationship> = {
+    accessorKey: "person1Name",
+    header: dictionary.person1,
+    cell: ({ row }) => {
+      const person = people.find((p) => p._id === row.original.person1Id);
+      return (
         <div className="capitalize">
-          {
-            relationshipTypes[
-              row.original.relationshipType as keyof typeof relationshipTypes
-            ]
-          }
+          {person ? getFullName(locale, person) : ""}
         </div>
-      ),
+      );
     },
-    columnHelper.display({
-      id: "actions",
-      enableHiding: false,
-      cell: ({ row }) => {
-        return (
-          <div className="flex items-center gap-2">
-            <RelationshipForm
-              dictionary={dictionary}
-              relationshipTypes={relationshipTypes}
-              locale={locale}
-              relationshipId={row.original._id}
-              preloadedPeople={preloadedPeople}
-            />
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => {
-                deleteRelationship({ relationshipId: row.original._id });
-              }}
-            >
-              <Trash2 />
-            </Button>
-          </div>
-        );
-      },
-    }),
-  ];
+  };
+  const person2Name: ColumnDef<Relationship> = {
+    accessorKey: "person2Name",
+
+    header: dictionary.person2,
+    cell: ({ row }) => {
+      const person = people.find((p) => p._id === row.original.person2Id);
+      return (
+        <div className="capitalize">
+          {person ? getFullName(locale, person) : ""}
+        </div>
+      );
+    },
+  };
+  const relationshipType: ColumnDef<Relationship> = {
+    accessorKey: "relationshipType",
+    header: dictionary.relationshipType,
+    cell: ({ row }) => (
+      <div className="capitalize">
+        {
+          relationshipTypes[
+            row.original.relationshipType as keyof typeof relationshipTypes
+          ]
+        }
+      </div>
+    ),
+  };
+  const actions: ColumnDef<Relationship> = columnHelper.display({
+    id: "actions",
+    enableHiding: false,
+    cell: ({ row }) => {
+      return (
+        <div className="flex items-center gap-2">
+          <RelationshipForm
+            dictionary={dictionary}
+            relationshipTypes={relationshipTypes}
+            locale={locale}
+            relationshipId={row.original._id}
+            preloadedPeople={preloadedPeople}
+          />
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => {
+              deleteRelationship({ relationshipId: row.original._id });
+            }}
+          >
+            <Trash2 />
+          </Button>
+        </div>
+      );
+    },
+  });
+
+  const is: ColumnDef<Relationship> = columnHelper.display({
+    id: "is",
+    enableHiding: false,
+    cell: ({ row }) => {
+      return <div></div>;
+    },
+  });
+
+  let columns: ColumnDef<Relationship>[];
+  if (locale === "th") {
+    columns = [person1Name, is, relationshipType, person2Name, actions];
+  } else {
+    columns = [person1Name, is, person2Name, relationshipType, actions];
+  }
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
