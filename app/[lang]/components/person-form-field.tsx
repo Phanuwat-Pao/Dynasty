@@ -94,7 +94,7 @@ export default function PersonFormField({
                         value={person._id}
                         key={person._id}
                         onSelect={() => {
-                          form.setValue("person1Id", person._id);
+                          form.setValue(name, person._id);
                         }}
                       >
                         {getFullName(locale, person)}
