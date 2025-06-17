@@ -17,9 +17,30 @@ const sarabun = Sarabun({
 
 export const metadata: Metadata = {
   title: "Dynasty",
-  description: "Dynasty",
+  description: "Dynasty is a tool for visualizing and analyzing family trees",
   icons: {
     icon: "/convex.svg",
+  },
+  robots: {
+    index: false,
+    follow: false,
+    noarchive: true,
+    nosnippet: true,
+    noimageindex: true,
+    nocache: true,
+    notranslate: true,
+    indexifembedded: false,
+    nositelinkssearchbox: true,
+  },
+  openGraph: {
+    type: "website",
+    title: "Dynasty",
+    description:
+      "Dynasty is a tool for visualizing and analyzing family trees.",
+    images: "/convex.svg",
+    siteName: "Dynasty",
+    locale: "en_US",
+    alternateLocale: ["th_TH"],
   },
 };
 
