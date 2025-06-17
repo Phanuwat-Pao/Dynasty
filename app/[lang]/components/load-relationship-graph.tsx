@@ -15,7 +15,7 @@ import {
   DEFAULT_EDGE_CURVATURE,
   indexParallelEdgesIndex,
 } from "@sigma/edge-curve";
-import { Preloaded, usePreloadedQuery } from "convex/react";
+import { useQuery } from "convex/react";
 import { DirectedGraph } from "graphology";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
@@ -43,21 +43,17 @@ export type EdgeType = {
 // Component that load the graph
 export default function LoadRelationshipGraph({
   locale,
-  preloadedPeople,
-  preloadedRelationships,
   relationshipTypes,
   disableHoverEffect,
 }: {
   locale: Locale;
-  preloadedPeople: Preloaded<typeof api.people.listPeople>;
-  preloadedRelationships: Preloaded<typeof api.relationships.listRelationships>;
   relationshipTypes: Dictionary["relationshipTypes"];
   disableHoverEffect?: boolean;
 }) {
   const { resolvedTheme } = useTheme();
 
-  const people = usePreloadedQuery(preloadedPeople);
-  const relationships = usePreloadedQuery(preloadedRelationships);
+  const people = useQuery(api.people.listPeople);
+  const relationships = useQuery(api.relationships.listRelationships);
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
   const loadGraph = useLoadGraph<NodeType, EdgeType>();
   const setSettings = useSetSettings<NodeType, EdgeType>();
@@ -66,7 +62,7 @@ export default function LoadRelationshipGraph({
 
   useEffect(() => {
     const graph = new DirectedGraph<NodeType, EdgeType>();
-    for (const person of people) {
+    for (const person of people || []) {
       const fullname = getFullName(locale, person);
 
       graph.addNode(person._id, {
@@ -80,7 +76,7 @@ export default function LoadRelationshipGraph({
         theme: resolvedTheme,
       });
     }
-    for (const relationship of relationships) {
+    for (const relationship of relationships || []) {
       graph.addEdge(relationship.person1Id, relationship.person2Id, {
         label: `${relationshipTypes[relationship.relationshipType]}`,
         size: 3,
@@ -100,7 +96,7 @@ export default function LoadRelationshipGraph({
           curvature:
             DEFAULT_EDGE_CURVATURE +
             (3 * DEFAULT_EDGE_CURVATURE * parallelIndex) /
-              (parallelMaxIndex || 1),
+            (parallelMaxIndex || 1),
         });
       } else {
         graph.setEdgeAttribute(edge, "type", "straight");

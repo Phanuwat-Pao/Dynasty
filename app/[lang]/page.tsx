@@ -1,6 +1,4 @@
-import { api } from "@/convex/_generated/api";
 import { UserButton } from "@clerk/nextjs";
-import { preloadQuery } from "convex/nextjs";
 import Image from "next/image";
 import { getDictionary } from "../../get-dictionary";
 import { Locale } from "../../i18n-config";
@@ -13,10 +11,6 @@ import SignInButton from "./components/sign-in-button";
 export default async function Home(props: {
   params: Promise<{ lang: Locale }>;
 }) {
-  const preloadedPeople = await preloadQuery(api.people.listPeople);
-  const preloadedRelationships = await preloadQuery(
-    api.relationships.listRelationships,
-  );
 
   const { lang } = await props.params;
 
@@ -39,14 +33,10 @@ export default async function Home(props: {
       <main className="p-8 flex flex-col gap-8 h-full w-full">
         <AuthenticatedSection
           dictionary={dictionary}
-          preloadedPeople={preloadedPeople}
-          preloadedRelationships={preloadedRelationships}
           locale={lang}
         />
         <NetworkVisualization
           locale={lang}
-          preloadedPeople={preloadedPeople}
-          preloadedRelationships={preloadedRelationships}
           relationshipTypes={dictionary.relationshipTypes}
         />
       </main>

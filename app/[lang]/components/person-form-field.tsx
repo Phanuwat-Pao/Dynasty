@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/popover";
 import { api } from "@/convex/_generated/api";
 import { Locale } from "@/i18n-config";
-import { addRelationshipFormSchema, cn, getFullName, relationshipTypesZod } from "@/lib/utils";
+import { addRelationshipFormSchema, cn, getFullName } from "@/lib/utils";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useState } from "react";
 import { UseFormReturn } from "react-hook-form";
@@ -70,11 +70,11 @@ export default function PersonFormField({
                 >
                   {field.value
                     ? getFullName(
-                        locale,
-                        availablePeopleForPerson.find(
-                          (person) => person._id === field.value,
-                        )!,
-                      )
+                      locale,
+                      availablePeopleForPerson.find(
+                        (person) => person._id === field.value,
+                      )!,
+                    )
                     : dictionary.selectPerson}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>

@@ -36,24 +36,22 @@ import {
 } from "@/components/ui/table";
 import { api } from "@/convex/_generated/api";
 import { Dictionary } from "@/get-dictionary";
-import { Preloaded, useMutation, usePreloadedQuery } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import Paginator from "./paginator";
 import PersonForm from "./person-form";
 
 export function PersonTable({
   dictionary,
-  preloadedPeople,
 }: {
   dictionary: Dictionary["person"];
-  preloadedPeople: Preloaded<typeof api.people.listPeople>;
 }) {
-  const people = usePreloadedQuery(preloadedPeople) || [];
+  const people = useQuery(api.people.listPeople);
   const deletePerson = useMutation(api.people.deletePerson);
   const [pagination] = React.useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
   });
-  type Person = (typeof people)[number];
+  type Person = NonNullable<typeof people>[number];
   const columnHelper = createColumnHelper<Person>();
   const columns: ColumnDef<Person>[] = [
     columnHelper.display({
@@ -173,7 +171,7 @@ export function PersonTable({
   const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable<Person>({
-    data: people,
+    data: people ?? [],
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -239,9 +237,9 @@ export function PersonTable({
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
                     </TableHead>
                   );
                 })}

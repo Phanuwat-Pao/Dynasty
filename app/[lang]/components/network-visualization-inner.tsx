@@ -1,5 +1,4 @@
 "use client";
-import { api } from "@/convex/_generated/api";
 import { Dictionary } from "@/get-dictionary";
 import { Locale } from "@/i18n-config";
 import { drawLabel } from "@/lib/draw";
@@ -15,7 +14,6 @@ import { GraphSearch } from "@react-sigma/graph-search";
 import "@react-sigma/graph-search/lib/style.css";
 import EdgeCurveProgram from "@sigma/edge-curve";
 import { createNodeImageProgram } from "@sigma/node-image";
-import type { Preloaded } from "convex/react";
 import { useTheme } from "next-themes";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { EdgeArrowProgram } from "sigma/rendering";
@@ -30,13 +28,9 @@ export type NetworkVisualizationProps = Parameters<
 // Component that display the graph
 export default function NetworkVisualizationInner({
   locale,
-  preloadedPeople,
-  preloadedRelationships,
   relationshipTypes,
 }: {
   locale: Locale;
-  preloadedPeople: Preloaded<typeof api.people.listPeople>;
-  preloadedRelationships: Preloaded<typeof api.relationships.listRelationships>;
   relationshipTypes: Dictionary["relationshipTypes"];
 }) {
   const [isClient, setIsClient] = useState(false);
@@ -61,16 +55,16 @@ export default function NetworkVisualizationInner({
       return options.length <= 10
         ? options
         : [
-            ...options.slice(0, 10),
-            {
-              type: "message",
-              message: (
-                <span className="text-center text-muted">
-                  And {options.length - 10} others
-                </span>
-              ),
-            },
-          ];
+          ...options.slice(0, 10),
+          {
+            type: "message",
+            message: (
+              <span className="text-center text-muted">
+                And {options.length - 10} others
+              </span>
+            ),
+          },
+        ];
     },
     [],
   );
@@ -111,8 +105,6 @@ export default function NetworkVisualizationInner({
         >
           <LoadRelationshipGraph
             locale={locale}
-            preloadedPeople={preloadedPeople}
-            preloadedRelationships={preloadedRelationships}
             relationshipTypes={relationshipTypes}
           />
           <ForceAtlas2Layout />

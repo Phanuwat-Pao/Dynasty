@@ -21,10 +21,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { api } from "@/convex/_generated/api";
 import { Dictionary } from "@/get-dictionary";
-import { Locale } from "@/i18n-config";
-import { addRelationshipFormSchema, cn, getFullName } from "@/lib/utils";
+import { addRelationshipFormSchema, cn } from "@/lib/utils";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useState } from "react";
 import { UseFormReturn } from "react-hook-form";
@@ -34,7 +32,6 @@ import z from "zod";
 export default function RelationshipFormField({
   form,
   dictionary,
-  locale,
   relationshipTypes,
 }: {
   form: UseFormReturn<z.infer<typeof addRelationshipFormSchema>>;
@@ -44,7 +41,6 @@ export default function RelationshipFormField({
     searchRelationshipType: string;
     noRelationshipTypeFound: string;
   };
-  locale: Locale;
   relationshipTypes: Dictionary["relationshipTypes"];
 }) {
   const [open, setOpen] = useState(false);

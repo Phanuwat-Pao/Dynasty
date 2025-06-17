@@ -1,14 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -18,48 +10,36 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
+  Form
 } from "@/components/ui/form";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { Dictionary } from "@/get-dictionary";
 import { Locale } from "@/i18n-config";
-import { addRelationshipFormSchema, cn } from "@/lib/utils";
+import { addRelationshipFormSchema } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Preloaded, useMutation, usePreloadedQuery } from "convex/react";
-import { Check, ChevronsUpDown, SquarePen } from "lucide-react";
+import { useMutation } from "convex/react";
+import { SquarePen } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
-import RelationshipFormField from "./relationship-form-field";
 import PersonFormField from "./person-form-field";
+import RelationshipFormField from "./relationship-form-field";
 
 export default function RelationshipForm({
   dictionary,
   relationshipTypes,
   locale,
   relationshipId,
-  preloadedPeople,
+  people,
 }: {
   dictionary: Dictionary["relationship"];
   relationshipTypes: Dictionary["relationshipTypes"];
   locale: Locale;
   relationshipId?: Id<"relationships">;
-  preloadedPeople: Preloaded<typeof api.people.listPeople>;
+  people: typeof api.people.listPeople["_returnType"];
 }) {
-  const people = usePreloadedQuery(preloadedPeople) || [];
   const addRelationship = useMutation(api.relationships.addRelationship);
   const updateRelationship = useMutation(api.relationships.updateRelationship);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -179,7 +159,6 @@ export default function RelationshipForm({
                 searchRelationshipType: dictionary.searchRelationshipType,
                 noRelationshipTypeFound: dictionary.noRelationshipTypeFound,
               }}
-              locale={locale}
               relationshipTypes={relationshipTypes}
             />
             {locale === "th" && person2FormField}
