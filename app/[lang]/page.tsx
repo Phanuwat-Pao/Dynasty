@@ -1,6 +1,7 @@
 import { api } from "@/convex/_generated/api";
 import { UserButton } from "@clerk/nextjs";
 import { preloadQuery } from "convex/nextjs";
+import Image from "next/image";
 import { getDictionary } from "../../get-dictionary";
 import { Locale } from "../../i18n-config";
 import AuthenticatedSection from "./components/authenticated-section";
@@ -24,7 +25,10 @@ export default async function Home(props: {
   return (
     <>
       <header className="sticky top-0 z-10 bg-background px-4 py-2 border-b-2 border-slate-200 dark:border-slate-800 flex flex-row justify-between items-center">
-        {dictionary.title}
+        <div className="flex flex-row items-center gap-2">
+          <Image src="/convex.svg" alt="Convex" width={32} height={32} />
+          {dictionary.title}
+        </div>
         <div className="flex flex-row gap-4">
           <SignInButton dictionary={dictionary.signIn} />
           <UserButton />
