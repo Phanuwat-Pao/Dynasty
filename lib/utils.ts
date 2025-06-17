@@ -1,6 +1,20 @@
 import { Locale } from "@/i18n-config";
 import { clsx, type ClassValue } from "clsx";
+import { z } from "zod";
 import { twMerge } from "tailwind-merge";
+
+export const relationshipTypesZod = z.union([
+  z.literal("father"),
+  z.literal("mother"),
+  z.literal("olderSibling"),
+]);
+
+export const addRelationshipFormSchema = z.object({
+  person1Id: z.string().min(1),
+  person2Id: z.string().min(1),
+  relationshipType: relationshipTypesZod,
+  number: z.number({ coerce: true }).min(1),
+});
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

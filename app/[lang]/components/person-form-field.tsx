@@ -23,17 +23,13 @@ import {
 } from "@/components/ui/popover";
 import { api } from "@/convex/_generated/api";
 import { Locale } from "@/i18n-config";
-import { cn, getFullName } from "@/lib/utils";
+import { addRelationshipFormSchema, cn, getFullName, relationshipTypesZod } from "@/lib/utils";
 import { Check, ChevronsUpDown } from "lucide-react";
+import { useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 import z from "zod";
 
-export const addRelationshipFormSchema = z.object({
-  person1Id: z.string().min(1),
-  person2Id: z.string().min(1),
-  relationshipType: z.union([z.literal("father"), z.literal("mother")]),
-  number: z.number({ coerce: true }).min(1),
-});
+
 
 export default function PersonFormField({
   form,
@@ -53,6 +49,7 @@ export default function PersonFormField({
   availablePeopleForPerson: (typeof api.people.listPeople)["_returnType"];
   name: "person1Id" | "person2Id";
 }) {
+  const [open, setOpen] = useState(false);
   return (
     <FormField
       control={form.control}
@@ -60,7 +57,7 @@ export default function PersonFormField({
       render={({ field }) => (
         <FormItem className="flex flex-col">
           <FormLabel>{dictionary.person}</FormLabel>
-          <Popover>
+          <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
               <FormControl>
                 <Button
@@ -95,6 +92,7 @@ export default function PersonFormField({
                         key={person._id}
                         onSelect={() => {
                           form.setValue(name, person._id);
+                          setOpen(false);
                         }}
                       >
                         {getFullName(locale, person)}

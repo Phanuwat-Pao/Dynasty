@@ -39,6 +39,7 @@
   },
   "relationshipTypes": {
     "father": "Father",
-    "mother": "Mother"
+    "mother": "Mother",
+    "olderSibling": "Older Sibling"
   }
 }

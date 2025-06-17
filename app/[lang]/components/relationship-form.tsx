@@ -35,16 +35,16 @@ import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { Dictionary } from "@/get-dictionary";
 import { Locale } from "@/i18n-config";
-import { cn } from "@/lib/utils";
+import { addRelationshipFormSchema, cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Preloaded, useMutation, usePreloadedQuery } from "convex/react";
 import { Check, ChevronsUpDown, SquarePen } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
-import PersonFormField, {
-  addRelationshipFormSchema,
-} from "./person-form-field";
+
+import RelationshipFormField from "./relationship-form-field";
+import PersonFormField from "./person-form-field";
 
 export default function RelationshipForm({
   dictionary,
@@ -171,79 +171,16 @@ export default function RelationshipForm({
             />
             <div>{dictionary.is}</div>
             {locale !== "th" && person2FormField}
-            <FormField
-              control={form.control}
-              name="relationshipType"
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel>{dictionary.relationshipType}</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant="outline"
-                          role="combobox"
-                          className={cn(
-                            "w-[200px] justify-between",
-                            !field.value && "text-muted-foreground",
-                          )}
-                        >
-                          {field.value
-                            ? relationshipTypes[
-                                field.value as keyof typeof relationshipTypes
-                              ]
-                            : dictionary.selectRelationshipType}
-                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-[200px] p-0">
-                      <Command>
-                        <CommandInput
-                          placeholder={dictionary.searchRelationshipType}
-                        />
-                        <CommandList>
-                          <CommandEmpty>
-                            {dictionary.noRelationshipTypeFound}
-                          </CommandEmpty>
-                          <CommandGroup>
-                            {Object.getOwnPropertyNames(relationshipTypes).map(
-                              (relationshipType) => (
-                                <CommandItem
-                                  value={relationshipType}
-                                  key={relationshipType}
-                                  onSelect={() => {
-                                    form.setValue(
-                                      "relationshipType",
-                                      relationshipType as keyof typeof relationshipTypes,
-                                    );
-                                  }}
-                                >
-                                  {
-                                    relationshipTypes[
-                                      relationshipType as keyof typeof relationshipTypes
-                                    ]
-                                  }
-                                  <Check
-                                    className={cn(
-                                      "ml-auto",
-                                      relationshipType === field.value
-                                        ? "opacity-100"
-                                        : "opacity-0",
-                                    )}
-                                  />
-                                </CommandItem>
-                              ),
-                            )}
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
-                  <FormDescription />
-                  <FormMessage />
-                </FormItem>
-              )}
+            <RelationshipFormField
+              form={form}
+              dictionary={{
+                relationshipType: dictionary.relationshipType,
+                selectRelationshipType: dictionary.selectRelationshipType,
+                searchRelationshipType: dictionary.searchRelationshipType,
+                noRelationshipTypeFound: dictionary.noRelationshipTypeFound,
+              }}
+              locale={locale}
+              relationshipTypes={relationshipTypes}
             />
             {locale === "th" && person2FormField}
             <DialogFooter>

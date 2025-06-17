@@ -9,6 +9,7 @@ import { v } from "convex/values";
 export const relationshipTypes = v.union(
   v.literal("father"),
   v.literal("mother"),
+  v.literal("olderSibling"),
 );
 
 export default defineSchema({

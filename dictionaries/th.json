@@ -39,6 +39,7 @@
   },
   "relationshipTypes": {
     "father": "พ่อ",
-    "mother": "แม่"
+    "mother": "แม่",
+    "olderSibling": "พี่"
   }
 }

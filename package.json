@@ -13,9 +13,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@clerk/clerk-react": "^5.31.9",
-    "@clerk/localizations": "^3.16.4",
-    "@clerk/nextjs": "^6.21.0",
+    "@clerk/clerk-react": "^5.32.0",
+    "@clerk/localizations": "^3.16.5",
+    "@clerk/nextjs": "^6.22.0",
     "@formatjs/intl-localematcher": "^0.6.1",
     "@hookform/resolvers": "^5.1.1",
     "@radix-ui/react-avatar": "^1.1.10",
@@ -43,18 +43,18 @@
     "convex": "^1.24.8",
     "graphology": "^0.26.0",
     "graphology-types": "^0.24.8",
-    "lucide-react": "^0.514.0",
+    "lucide-react": "^0.516.0",
     "negotiator": "^1.0.0",
     "next": "15.3.3",
     "next-themes": "^0.4.6",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-hook-form": "^7.57.0",
+    "react-hook-form": "^7.58.0",
     "react-scan": "^0.3.4",
     "sigma": "^3.0.2",
     "sonner": "^2.0.5",
     "tailwind-merge": "^3.3.1",
-    "zod": "^3.25.61"
+    "zod": "^3.25.67"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
